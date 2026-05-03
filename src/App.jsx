@@ -3,6 +3,8 @@ import Layout from "./Layout";
 import EarthSimulatorPage from "./pages/EarthSimulatorPage";
 import HomePage from "./pages/HomePage";
 import JupiterSimulatorPage from "./pages/JupiterSimulatorPage";
+import SaturnSimulatorPage from "./pages/SaturnSimulatorPage";
+import SunSimulatorPage from "./pages/SunSimulatorPage";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +21,14 @@ const router = createBrowserRouter([
       {
         path: "/jupiter",
         element: <JupiterSimulatorPage />,
+      },
+      {
+        path: "/saturn",
+        element: <SaturnSimulatorPage />,
+      },
+      {
+        path: "/sun",
+        element: <SunSimulatorPage />,
       },
     ],
   },

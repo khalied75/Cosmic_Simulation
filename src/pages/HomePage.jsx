@@ -2,6 +2,15 @@ import { Link } from "react-router-dom";
 
 const simulators = [
   {
+    id: "sun",
+    title: "محاكاة الشمس",
+    englishTitle: "Sun Simulator",
+    description: "نجم مركزي تفاعلي مع نسيج شمسي متوهج، بقع شمسية، شواظ متحركة، إكليل ديناميكي، وطبقات يمكن اختيارها.",
+    path: "/sun",
+    status: "جاهز",
+    accent: "orange",
+  },
+  {
     id: "earth",
     title: "محاكاة الأرض",
     englishTitle: "Earth Simulator",
@@ -28,6 +37,15 @@ const simulators = [
     status: "قريباً",
     accent: "violet",
   },
+  {
+    id: "saturn",
+    title: "محاكاة زحل",
+    englishTitle: "Saturn Simulator",
+    description: "كوكب زحل بحلقاته الجليدية، أقمار أساسية، وواجهة تفاعل بسيطة مثل باقي المحاكيات.",
+    path: "/saturn",
+    status: "جاهز",
+    accent: "amber",
+  },
 ];
 
 function HomePage() {
@@ -53,17 +71,21 @@ function HomePage() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-3">
+        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {simulators.map((simulator) => {
-            const isReady = simulator.status === "جاهز";
+            const isReady = ["جاهز", "Ready"].includes(simulator.status);
             const accentClass =
-              simulator.accent === "amber"
+              simulator.accent === "orange"
+                ? "hover:border-orange-200/45 text-orange-100"
+                : simulator.accent === "amber"
                 ? "hover:border-amber-200/45 text-amber-100"
                 : simulator.accent === "violet"
                   ? "hover:border-violet-200/45 text-violet-100"
                   : "hover:border-cyan-200/45 text-cyan-100";
             const badgeClass =
-              simulator.accent === "amber"
+              simulator.accent === "orange"
+                ? "bg-orange-200 text-slate-950"
+                : simulator.accent === "amber"
                 ? "bg-amber-200 text-slate-950"
                 : "bg-cyan-200 text-slate-950";
             const content = (

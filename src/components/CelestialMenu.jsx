@@ -1,5 +1,15 @@
 const bodies = [
   {
+    id: "sun",
+    name: "Sun",
+    arabicName: "الشمس",
+    type: "Star",
+    arabicType: "نجم",
+    status: "Ready",
+    arabicStatus: "جاهز",
+    color: "bg-orange-300",
+  },
+  {
     id: "earth",
     name: "Earth",
     arabicName: "الأرض",
@@ -30,14 +40,14 @@ const bodies = [
     color: "bg-violet-300",
   },
   {
-    id: "mars",
-    name: "Mars",
-    arabicName: "المريخ",
-    type: "Planet",
-    arabicType: "كوكب",
-    status: "Soon",
-    arabicStatus: "قريباً",
-    color: "bg-rose-300",
+    id: "saturn",
+    name: "Saturn",
+    arabicName: "زحل",
+    type: "Ringed Planet",
+    arabicType: "كوكب حلقي",
+    status: "Ready",
+    arabicStatus: "جاهز",
+    color: "bg-yellow-100",
   },
 ];
 

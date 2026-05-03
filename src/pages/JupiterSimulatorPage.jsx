@@ -54,8 +54,10 @@ function JupiterSimulatorPage() {
   const text = copy[language];
 
   const handleSelectBody = (bodyId) => {
+    if (bodyId === "sun") navigate("/sun");
     if (bodyId === "earth") navigate("/earth");
     if (bodyId === "jupiter") setIsMenuOpen(false);
+    if (bodyId === "saturn") navigate("/saturn");
   };
 
   return (
