@@ -1,13 +1,31 @@
-import { useState } from 'react'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from "./Layout";
+import EarthSimulatorPage from "./pages/EarthSimulatorPage";
+import HomePage from "./pages/HomePage";
+import JupiterSimulatorPage from "./pages/JupiterSimulatorPage";
+
+const router = createBrowserRouter([
+  {
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/earth",
+        element: <EarthSimulatorPage />,
+      },
+      {
+        path: "/jupiter",
+        element: <JupiterSimulatorPage />,
+      },
+    ],
+  },
+]);
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-
-     </>
-  )
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
