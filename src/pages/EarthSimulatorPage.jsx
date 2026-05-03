@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
 import RealisticEarthScene from "../components/RealisticEarthScene";
 
 const copy = {
   AR: {
-    back: "العودة للرئيسية",
     instructions: "اسحب للتدوير · عجلة الماوس للتكبير · نقرتان لإيقاف الدوران",
     status: "كوكب الأرض · دوران تلقائي",
     active: "نشط",
@@ -14,7 +13,6 @@ const copy = {
     menuLabel: "فتح القائمة",
   },
   EN: {
-    back: "Back Home",
     instructions: "Drag to rotate · Mouse wheel to zoom · Double-click to pause rotation",
     status: "Planet Earth · Auto rotation",
     active: "Active",
@@ -68,12 +66,6 @@ function EarthSimulatorPage() {
           language === "AR" ? "left-4 right-20" : "left-20 right-4"
         }`}
       >
-        <Link
-          className="rounded-full border border-white/15 bg-black/45 px-4 py-2 text-sm font-semibold text-white/82 shadow-xl shadow-black/25 backdrop-blur-xl transition hover:bg-white/10 hover:text-white"
-          to="/"
-        >
-          {text.back}
-        </Link>
         <div className="hidden rounded-full border border-white/12 bg-black/45 px-4 py-2 text-sm text-white/72 shadow-xl shadow-black/25 backdrop-blur-xl sm:block">
           {text.instructions}
         </div>

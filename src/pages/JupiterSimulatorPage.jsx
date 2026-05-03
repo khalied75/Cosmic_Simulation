@@ -1,53 +1,27 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
 import JupiterScene from "../components/JupiterScene";
 import jupiterMoons from "../data/jupiterMoons";
 
 const copy = {
   AR: {
-    back: "العودة للرئيسية",
     menuLabel: "فتح القائمة",
-    title: "المشتري",
-    subtitle: "عملاق المجموعة الشمسية",
-    pause: "إيقاف",
-    play: "تشغيل",
-    reset: "إعادة",
-    instructions: "اسحب للتدوير · عجلة الماوس للتكبير · نقرتان للإيقاف",
+    instructions: "اسحب للتدوير · عجلة الماوس للتكبير · نقرتان لإيقاف الدوران",
     status: "محاكاة المشتري ·",
     live: "نشطة",
     paused: "متوقفة",
     choose: "اختيار محاكي آخر",
-    infoTitle: "كوكب المشتري",
-    info: "المشتري هو خامس الكواكب بعداً عن الشمس وأكبر كواكب المجموعة الشمسية. يتميز بأحزمته الغازية والبقعة الحمراء العظيمة، وهي عاصفة ضخمة مستمرة منذ قرون.",
     moons: "أقمار غاليليو",
-    stats: "إحصائيات",
-    diameter: "القطر",
-    mass: "الكتلة",
-    moonCount: "الأقمار",
-    day: "طول اليوم",
   },
   EN: {
-    back: "Back Home",
     menuLabel: "Open menu",
-    title: "Jupiter",
-    subtitle: "Giant of the Solar System",
-    pause: "Pause",
-    play: "Play",
-    reset: "Reset",
-    instructions: "Drag to rotate · Mouse wheel to zoom · Double-click to pause",
+    instructions: "Drag to rotate · Mouse wheel to zoom · Double-click to pause rotation",
     status: "Jupiter Simulation ·",
     live: "Live",
     paused: "Paused",
     choose: "Choose Another Simulator",
-    infoTitle: "Planet Jupiter",
-    info: "Jupiter is the fifth planet from the Sun and the largest planet in the Solar System. It is known for its gas bands and the Great Red Spot, a giant storm that has lasted for centuries.",
     moons: "Galilean Moons",
-    stats: "Stats",
-    diameter: "Diameter",
-    mass: "Mass",
-    moonCount: "Moons",
-    day: "Day Length",
   },
 };
 
@@ -112,41 +86,20 @@ function JupiterSimulatorPage() {
       />
 
       <header
-        className={`pointer-events-auto fixed top-4 z-20 flex items-center justify-between gap-3 ${
-          isArabic ? "left-4 right-20" : "left-20 right-4"
+        className={`pointer-events-auto fixed top-4 z-20 flex items-center ${
+          isArabic ? "left-4 right-20 justify-start" : "left-20 right-4 justify-end"
         }`}
       >
-        <Link className="rounded-full border border-white/15 bg-black/45 px-4 py-2 text-sm font-semibold text-white/82 shadow-xl shadow-black/25 backdrop-blur-xl transition hover:bg-white/10 hover:text-white" to="/">
-          {text.back}
-        </Link>
-        <div className="rounded-full border border-amber-200/20 bg-black/45 px-5 py-2 text-center shadow-xl shadow-black/25 backdrop-blur-xl">
-          <div className="text-lg font-black text-amber-100">{text.title}</div>
-          <div className="text-xs text-amber-100/70">{text.subtitle}</div>
+        <div className="hidden rounded-full border border-white/80 bg-black/45 px-6 py-3 text-sm font-bold text-white shadow-xl shadow-black/25 backdrop-blur-xl md:block">
+          {text.instructions}
         </div>
-        {/* <div className="flex gap-2">
-          <button className="rounded-full border border-white/15 bg-black/45 px-4 py-2 text-sm font-semibold text-white/82 backdrop-blur-xl transition hover:bg-white/10" onClick={() => setIsPaused((value) => !value)} type="button">
-            {isPaused ? text.play : text.pause}
-          </button>
-        </div> */}
       </header>
 
-      {/* <aside className={`pointer-events-auto fixed top-28 z-20 hidden w-80 space-y-4 lg:block ${isArabic ? "left-5" : "right-5"}`}>
-        <section className="rounded-xl border border-amber-200/18 bg-black/42 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl">
-          <h2 className="text-xl font-bold text-amber-200">{text.infoTitle}</h2>
-          <p className="mt-3 text-sm leading-7 text-white/70">{text.info}</p>
-        </section>
-        <section className="rounded-xl border border-amber-200/18 bg-black/42 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl">
-          <h3 className="text-lg font-bold text-amber-200">{text.stats}</h3>
-          <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-            <div className="rounded-lg bg-white/6 p-3"><p className="text-white/45">{text.diameter}</p><p className="font-bold text-amber-100">142,984 km</p></div>
-            <div className="rounded-lg bg-white/6 p-3"><p className="text-white/45">{text.mass}</p><p className="font-bold text-amber-100">318 Earths</p></div>
-            <div className="rounded-lg bg-white/6 p-3"><p className="text-white/45">{text.moonCount}</p><p className="font-bold text-amber-100">95</p></div>
-            <div className="rounded-lg bg-white/6 p-3"><p className="text-white/45">{text.day}</p><p className="font-bold text-amber-100">9.93 h</p></div>
-          </div>
-        </section>
-      </aside> */}
-
-      <aside className={`pointer-events-auto fixed top-28 z-20 hidden w-64 lg:block ${isArabic ? "right-5" : "left-5"}`}>
+      <aside
+        className={`pointer-events-auto fixed top-28 z-20 hidden w-64 lg:block ${
+          isArabic ? "right-5" : "left-5"
+        }`}
+      >
         <section className="rounded-xl border border-amber-200/18 bg-black/42 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl">
           <h3 className="text-lg font-bold text-amber-200">{text.moons}</h3>
           <div className="mt-4 space-y-2">
@@ -162,7 +115,9 @@ function JupiterSimulatorPage() {
                 type="button"
               >
                 <span className="font-bold">{isArabic ? moon.ar : moon.en}</span>
-                <span className="mt-1 block text-xs text-white/50">{moonInfo[moon.id][isArabic ? "ar" : "en"]}</span>
+                <span className="mt-1 block text-xs text-white/50">
+                  {moonInfo[moon.id][isArabic ? "ar" : "en"]}
+                </span>
               </button>
             ))}
           </div>
@@ -171,9 +126,16 @@ function JupiterSimulatorPage() {
 
       <div className="pointer-events-none fixed bottom-5 left-5 right-5 z-20 flex justify-between gap-3">
         <div className="rounded-full border border-white/12 bg-black/48 px-5 py-3 text-sm text-white/78 shadow-xl shadow-black/25 backdrop-blur-xl">
-          {text.status} <span className={isPaused ? "text-orange-200" : "text-emerald-200"}>{isPaused ? text.paused : text.live}</span>
+          {text.status}{" "}
+          <span className={isPaused ? "text-orange-200" : "text-emerald-200"}>
+            {isPaused ? text.paused : text.live}
+          </span>
         </div>
-        <button className="pointer-events-auto hidden rounded-full border border-white/12 bg-black/48 px-5 py-3 text-sm font-semibold text-white/78 shadow-xl shadow-black/25 backdrop-blur-xl transition hover:bg-white/10 md:block" onClick={() => navigate("/")} type="button">
+        <button
+          className="pointer-events-auto hidden rounded-full border border-white/12 bg-black/48 px-5 py-3 text-sm font-semibold text-white/78 shadow-xl shadow-black/25 backdrop-blur-xl transition hover:bg-white/10 md:block"
+          onClick={() => navigate("/")}
+          type="button"
+        >
           {text.choose}
         </button>
       </div>
