@@ -1,112 +1,234 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
+const copy = {
+  AR: {
+    dir: "rtl",
+    badge: "Cosmic Simulation",
+    heading: "بوابة محاكاة الكون",
+    intro:
+      "صفحة رئيسية لاختيار المحاكيات وقراءة نظرة عامة قبل الدخول إلى التجربة. كل محاكي يفتح في صفحة مستقلة حتى تبقى مساحة العرض نظيفة ومركزة.",
+    credit: "إعداد: خالد جمال الزعبي",
+    open: "افتح المحاكي",
+    unavailable: "غير متاح الآن",
+    ready: "جاهز",
+    soon: "قريباً",
+  },
+  EN: {
+    dir: "ltr",
+    badge: "Cosmic Simulation",
+    heading: "Cosmic Simulation Portal",
+    intro:
+      "Choose a simulator and get a quick overview before entering the experience. Each simulator opens on its own page so the viewing area stays clean and focused.",
+    credit: "Prepared by: Khaled Jamal Al-Zoubi",
+    open: "Open Simulator",
+    unavailable: "Not Available Yet",
+    ready: "Ready",
+    soon: "Soon",
+  },
+};
 
 const simulators = [
   {
     id: "sun",
-    title: "محاكاة الشمس",
-    englishTitle: "Sun Simulator",
-    description: "نجم مركزي تفاعلي مع نسيج شمسي متوهج، بقع شمسية، شواظ متحركة، إكليل ديناميكي، وطبقات يمكن اختيارها.",
+    title: { AR: "محاكاة الشمس", EN: "Sun Simulator" },
+    subtitle: { AR: "Sun Simulator", EN: "الشمس" },
+    description: {
+      AR: "نجم مركزي تفاعلي مع نسيج شمسي متوهج، بقع شمسية، شواظ متحركة، إكليل ديناميكي، وطبقات يمكن اختيارها.",
+      EN: "An interactive central star with a glowing solar texture, sunspots, moving prominences, a dynamic corona, and selectable layers.",
+    },
     path: "/sun",
-    status: "جاهز",
+    status: "ready",
     accent: "orange",
   },
   {
     id: "earth",
-    title: "محاكاة الأرض",
-    englishTitle: "Earth Simulator",
-    description: "كوكب تفاعلي ثلاثي الأبعاد مع دوران، تكبير، غيوم، إضاءة، وعلامات مدن.",
+    title: { AR: "محاكاة الأرض", EN: "Earth Simulator" },
+    subtitle: { AR: "Earth Simulator", EN: "الأرض" },
+    description: {
+      AR: "كوكب تفاعلي ثلاثي الأبعاد مع دوران، تكبير، غيوم، إضاءة، وعلامات مدن.",
+      EN: "A 3D interactive planet with rotation, zoom, clouds, lighting, and city labels.",
+    },
     path: "/earth",
-    status: "جاهز",
+    status: "ready",
     accent: "cyan",
   },
   {
+    id: "venus",
+    title: { AR: "محاكاة الزهرة", EN: "Venus Simulator" },
+    subtitle: { AR: "Venus Simulator", EN: "الزهرة" },
+    description: {
+      AR: "كوكب لامع بغلاف جوي كثيف، سحب كبريتية ذهبية، سطح صخري ساخن، وحركة سحب سريعة.",
+      EN: "A bright planet with a dense atmosphere, golden sulfur clouds, a hot rocky surface, and fast-moving cloud layers.",
+    },
+    path: "/venus",
+    status: "ready",
+    accent: "yellow",
+  },
+  {
+    id: "mars",
+    title: { AR: "محاكاة المريخ", EN: "Mars Simulator" },
+    subtitle: { AR: "Mars Simulator", EN: "المريخ" },
+    description: {
+      AR: "الكوكب الأحمر بنسيج عالي الواقعية، فوهات تصادمية، أغطية قطبية، غبار مرئي، وقمري فوبوس وديموس.",
+      EN: "The Red Planet with a highly realistic texture, impact craters, polar caps, visible dust, and the moons Phobos and Deimos.",
+    },
+    path: "/mars",
+    status: "ready",
+    accent: "red",
+  },
+  {
     id: "jupiter",
-    title: "محاكاة المشتري",
-    englishTitle: "Jupiter Simulator",
-    description: "عملاق غازي واقعي مع أحزمته، البقعة الحمراء، حلقات خافتة، وأقمار غاليليو.",
+    title: { AR: "محاكاة المشتري", EN: "Jupiter Simulator" },
+    subtitle: { AR: "Jupiter Simulator", EN: "المشتري" },
+    description: {
+      AR: "عملاق غازي واقعي مع أحزمته، البقعة الحمراء، حلقات خافتة، وأقمار غاليليو.",
+      EN: "A realistic gas giant with bands, the Great Red Spot, faint rings, and the Galilean moons.",
+    },
     path: "/jupiter",
-    status: "جاهز",
+    status: "ready",
     accent: "amber",
   },
   {
     id: "black-hole",
-    title: "الثقب الأسود",
-    englishTitle: "Black Hole",
-    description: "محاكاة للجاذبية وقرص التراكم وانحناء الضوء. ستضاف في المرحلة القادمة.",
+    title: { AR: "الثقب الأسود", EN: "Black Hole" },
+    subtitle: { AR: "Black Hole", EN: "الثقب الأسود" },
+    description: {
+      AR: "محاكاة للجاذبية وقرص التراكم وانحناء الضوء. ستضاف في المرحلة القادمة.",
+      EN: "A gravity, accretion disk, and light-bending simulation planned for the next stage.",
+    },
     path: "/black-hole",
-    status: "قريباً",
+    status: "soon",
     accent: "violet",
   },
   {
     id: "saturn",
-    title: "محاكاة زحل",
-    englishTitle: "Saturn Simulator",
-    description: "كوكب زحل بحلقاته الجليدية، أقمار أساسية، وواجهة تفاعل بسيطة مثل باقي المحاكيات.",
+    title: { AR: "محاكاة زحل", EN: "Saturn Simulator" },
+    subtitle: { AR: "Saturn Simulator", EN: "زحل" },
+    description: {
+      AR: "كوكب زحل بحلقاته الجليدية، أقمار أساسية، وواجهة تفاعل بسيطة مثل باقي المحاكيات.",
+      EN: "Saturn with icy rings, main moons, and a simple interaction interface like the other simulators.",
+    },
     path: "/saturn",
-    status: "جاهز",
+    status: "ready",
     accent: "amber",
+  },
+  {
+    id: "neptune",
+    title: { AR: "محاكاة نبتون", EN: "Neptune Simulator" },
+    subtitle: { AR: "Neptune Simulator", EN: "نبتون" },
+    description: {
+      AR: "عملاق أزرق بعيد مع عاصفة لامعة، أحزمة جوية خفيفة، هالة زرقاء، وحلقات رفيعة خافتة.",
+      EN: "A distant blue giant with a bright storm, subtle atmospheric bands, a blue glow, and thin faint rings.",
+    },
+    path: "/neptune",
+    status: "ready",
+    accent: "sky",
   },
 ];
 
+function getAccentClasses(accent) {
+  if (accent === "orange") {
+    return {
+      card: "hover:border-orange-200/45 text-orange-100",
+      badge: "bg-orange-200 text-slate-950",
+    };
+  }
+  if (accent === "amber") {
+    return {
+      card: "hover:border-amber-200/45 text-amber-100",
+      badge: "bg-amber-200 text-slate-950",
+    };
+  }
+  if (accent === "violet") {
+    return {
+      card: "hover:border-violet-200/45 text-violet-100",
+      badge: "bg-violet-200 text-slate-950",
+    };
+  }
+  if (accent === "red") {
+    return {
+      card: "hover:border-red-200/45 text-red-100",
+      badge: "bg-red-200 text-slate-950",
+    };
+  }
+  if (accent === "yellow") {
+    return {
+      card: "hover:border-yellow-200/45 text-yellow-100",
+      badge: "bg-yellow-200 text-slate-950",
+    };
+  }
+  if (accent === "sky") {
+    return {
+      card: "hover:border-sky-200/45 text-sky-100",
+      badge: "bg-sky-200 text-slate-950",
+    };
+  }
+  return {
+    card: "hover:border-cyan-200/45 text-cyan-100",
+    badge: "bg-cyan-200 text-slate-950",
+  };
+}
+
 function HomePage() {
+  const [language, setLanguage] = useState("AR");
+  const text = copy[language];
+
   return (
-    <main className="min-h-screen overflow-hidden bg-[#030511] text-white" dir="rtl">
+    <main className="min-h-screen overflow-x-hidden bg-[#030511] text-white" dir={text.dir}>
       <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(98,219,232,0.16),transparent_26%),radial-gradient(circle_at_84%_22%,rgba(214,154,82,0.14),transparent_24%),linear-gradient(180deg,#030511,#080b17_58%,#030511)]" />
       <div className="pointer-events-none fixed inset-0 opacity-70 [background-image:radial-gradient(#ffffff_1px,transparent_1px)] [background-size:58px_58px]" />
 
-      <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-5 py-14 md:px-8">
+      <div className="fixed right-5 top-5 z-20 flex rounded-full border border-white/15 bg-black/45 p-1 shadow-xl shadow-black/30 backdrop-blur-xl">
+        {["AR", "EN"].map((item) => (
+          <button
+            className={`rounded-full px-3 py-1 text-xs font-bold transition ${
+              language === item ? "bg-cyan-200 text-slate-950" : "text-white/65 hover:text-white"
+            }`}
+            key={item}
+            onClick={() => setLanguage(item)}
+            type="button"
+          >
+            {item}
+          </button>
+        ))}
+      </div>
+
+      <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col justify-center px-5 pb-16 pt-24 md:px-8">
         <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-200">
-            Cosmic Simulation
-          </p>
-          <h1 className="mt-5 text-4xl font-bold leading-tight md:text-7xl">
-            بوابة محاكاة الكون
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-8 text-white/68 md:text-lg">
-            صفحة رئيسية لاختيار المحاكيات وقراءة نظرة عامة قبل الدخول إلى التجربة.
-            كل محاكي يفتح في صفحة مستقلة حتى تبقى مساحة العرض نظيفة ومركزة.
-          </p>
+          <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-200">{text.badge}</p>
+          <h1 className="mt-5 text-4xl font-bold leading-tight md:text-7xl">{text.heading}</h1>
+          <p className="mt-5 max-w-2xl text-base leading-8 text-white/68 md:text-lg">{text.intro}</p>
           <p className="mt-6 inline-flex rounded-full border border-cyan-200/25 bg-cyan-200/10 px-4 py-2 text-sm font-semibold text-cyan-100">
-            إعداد: خالد جمال الزعبي
+            {text.credit}
           </p>
         </div>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {simulators.map((simulator) => {
-            const isReady = ["جاهز", "Ready"].includes(simulator.status);
-            const accentClass =
-              simulator.accent === "orange"
-                ? "hover:border-orange-200/45 text-orange-100"
-                : simulator.accent === "amber"
-                ? "hover:border-amber-200/45 text-amber-100"
-                : simulator.accent === "violet"
-                  ? "hover:border-violet-200/45 text-violet-100"
-                  : "hover:border-cyan-200/45 text-cyan-100";
-            const badgeClass =
-              simulator.accent === "orange"
-                ? "bg-orange-200 text-slate-950"
-                : simulator.accent === "amber"
-                ? "bg-amber-200 text-slate-950"
-                : "bg-cyan-200 text-slate-950";
+            const isReady = simulator.status === "ready";
+            const accentClass = getAccentClasses(simulator.accent);
             const content = (
-              <article className={`h-full rounded-xl border border-white/12 bg-white/[0.045] p-5 shadow-2xl shadow-black/20 backdrop-blur-xl transition hover:bg-white/[0.07] ${accentClass}`}>
+              <article
+                className={`h-full rounded-xl border border-white/12 bg-white/[0.045] p-4 shadow-2xl shadow-black/20 backdrop-blur-xl transition hover:bg-white/[0.07] ${accentClass.card}`}
+              >
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/55">
-                      {simulator.englishTitle}
+                      {simulator.subtitle[language]}
                     </p>
-                    <h2 className="mt-3 text-2xl font-bold text-white">{simulator.title}</h2>
+                    <h2 className="mt-3 text-xl font-bold leading-8 text-white">{simulator.title[language]}</h2>
                   </div>
-                  <span className={`rounded-full px-3 py-1 text-xs font-bold ${isReady ? badgeClass : "bg-white/10 text-white/55"}`}>
-                    {simulator.status}
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-bold ${
+                      isReady ? accentClass.badge : "bg-white/10 text-white/55"
+                    }`}
+                  >
+                    {isReady ? text.ready : text.soon}
                   </span>
                 </div>
-                <p className="mt-5 min-h-24 text-sm leading-7 text-white/62">
-                  {simulator.description}
-                </p>
-                <div className="mt-6 text-sm font-bold">
-                  {isReady ? "افتح المحاكي" : "غير متاح الآن"}
-                </div>
+                <p className="mt-4 min-h-20 text-sm leading-7 text-white/62">{simulator.description[language]}</p>
+                <div className="mt-6 text-sm font-bold">{isReady ? text.open : text.unavailable}</div>
               </article>
             );
 

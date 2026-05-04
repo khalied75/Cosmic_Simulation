@@ -3,8 +3,11 @@ import Layout from "./Layout";
 import EarthSimulatorPage from "./pages/EarthSimulatorPage";
 import HomePage from "./pages/HomePage";
 import JupiterSimulatorPage from "./pages/JupiterSimulatorPage";
+import MarsSimulatorPage from "./pages/MarsSimulatorPage";
+import NeptuneSimulatorPage from "./pages/NeptuneSimulatorPage";
 import SaturnSimulatorPage from "./pages/SaturnSimulatorPage";
 import SunSimulatorPage from "./pages/SunSimulatorPage";
+import VenusSimulatorPage from "./pages/VenusSimulatorPage";
 
 const router = createBrowserRouter([
   {
@@ -19,12 +22,24 @@ const router = createBrowserRouter([
         element: <EarthSimulatorPage />,
       },
       {
+        path: "/venus",
+        element: <VenusSimulatorPage />,
+      },
+      {
         path: "/jupiter",
         element: <JupiterSimulatorPage />,
       },
       {
+        path: "/mars",
+        element: <MarsSimulatorPage />,
+      },
+      {
         path: "/saturn",
         element: <SaturnSimulatorPage />,
+      },
+      {
+        path: "/neptune",
+        element: <NeptuneSimulatorPage />,
       },
       {
         path: "/sun",

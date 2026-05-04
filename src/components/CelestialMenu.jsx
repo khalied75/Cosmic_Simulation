@@ -20,6 +20,26 @@ const bodies = [
     color: "bg-cyan-200",
   },
   {
+    id: "venus",
+    name: "Venus",
+    arabicName: "الزهرة",
+    type: "Terrestrial Planet",
+    arabicType: "كوكب صخري",
+    status: "Ready",
+    arabicStatus: "جاهز",
+    color: "bg-yellow-200",
+  },
+  {
+    id: "mars",
+    name: "Mars",
+    arabicName: "المريخ",
+    type: "Terrestrial Planet",
+    arabicType: "الكوكب الأحمر",
+    status: "Ready",
+    arabicStatus: "جاهز",
+    color: "bg-red-400",
+  },
+  {
     id: "jupiter",
     name: "Jupiter",
     arabicName: "المشتري",
@@ -48,6 +68,16 @@ const bodies = [
     status: "Ready",
     arabicStatus: "جاهز",
     color: "bg-yellow-100",
+  },
+  {
+    id: "neptune",
+    name: "Neptune",
+    arabicName: "نبتون",
+    type: "Ice Giant",
+    arabicType: "عملاق جليدي",
+    status: "Ready",
+    arabicStatus: "جاهز",
+    color: "bg-sky-300",
   },
 ];
 

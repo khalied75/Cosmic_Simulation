@@ -38,8 +38,11 @@ function SaturnSimulatorPage() {
   const handleSelectBody = (bodyId) => {
     if (bodyId === "sun") navigate("/sun");
     if (bodyId === "earth") navigate("/earth");
+    if (bodyId === "venus") navigate("/venus");
+    if (bodyId === "mars") navigate("/mars");
     if (bodyId === "jupiter") navigate("/jupiter");
     if (bodyId === "saturn") setIsMenuOpen(false);
+    if (bodyId === "neptune") navigate("/neptune");
   };
 
   return (
