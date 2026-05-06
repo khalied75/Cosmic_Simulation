@@ -55,8 +55,8 @@ const bodies = [
     arabicName: "الثقب الأسود",
     type: "Gravity",
     arabicType: "جاذبية",
-    status: "Soon",
-    arabicStatus: "قريباً",
+    status: "Ready",
+    arabicStatus: "جاهز",
     color: "bg-violet-300",
   },
   {
@@ -78,6 +78,16 @@ const bodies = [
     status: "Ready",
     arabicStatus: "جاهز",
     color: "bg-sky-300",
+  },
+  {
+    id: "uranus",
+    name: "Uranus",
+    arabicName: "أورانوس",
+    type: "Ice Giant",
+    arabicType: "عملاق جليدي",
+    status: "Ready",
+    arabicStatus: "جاهز",
+    color: "bg-cyan-300",
   },
 ];
 

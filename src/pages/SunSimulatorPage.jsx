@@ -150,11 +150,13 @@ function SunSimulatorPage() {
 
   const handleSelectBody = (bodyId) => {
     if (bodyId === "earth") navigate("/earth");
+    if (bodyId === "black-hole") navigate("/black-hole");
     if (bodyId === "venus") navigate("/venus");
     if (bodyId === "mars") navigate("/mars");
     if (bodyId === "jupiter") navigate("/jupiter");
     if (bodyId === "saturn") navigate("/saturn");
     if (bodyId === "neptune") navigate("/neptune");
+    if (bodyId === "uranus") navigate("/uranus");
     if (bodyId === "sun") setIsMenuOpen(false);
   };
 

@@ -66,6 +66,18 @@ const simulators = [
     accent: "yellow",
   },
   {
+    id: "uranus",
+    title: { AR: "محاكاة أورانوس", EN: "Uranus Simulator" },
+    subtitle: { AR: "Uranus Simulator", EN: "أورانوس" },
+    description: {
+      AR: "عملاق فيروزي هادئ مع ميل محوري حاد، حلقات شبه عمودية، غلاف بارد، وأحزمة جوية خفيفة جداً.",
+      EN: "A calm turquoise giant with an extreme axial tilt, near-vertical rings, a cold atmosphere, and very subtle atmospheric bands.",
+    },
+    path: "/uranus",
+    status: "ready",
+    accent: "teal",
+  },
+  {
     id: "mars",
     title: { AR: "محاكاة المريخ", EN: "Mars Simulator" },
     subtitle: { AR: "Mars Simulator", EN: "المريخ" },
@@ -94,11 +106,11 @@ const simulators = [
     title: { AR: "الثقب الأسود", EN: "Black Hole" },
     subtitle: { AR: "Black Hole", EN: "الثقب الأسود" },
     description: {
-      AR: "محاكاة للجاذبية وقرص التراكم وانحناء الضوء. ستضاف في المرحلة القادمة.",
-      EN: "A gravity, accretion disk, and light-bending simulation planned for the next stage.",
+      AR: "مشهد كوني واقعي يجمع أفق الحدث، حلقة فوتونية، قرص تراكم متوهج، وتأثيرات عدسة جاذبية عميقة.",
+      EN: "A realistic cosmic scene combining the event horizon, photon ring, glowing accretion disk, and deep gravitational lensing.",
     },
     path: "/black-hole",
-    status: "soon",
+    status: "ready",
     accent: "violet",
   },
   {
@@ -162,6 +174,12 @@ function getAccentClasses(accent) {
     return {
       card: "hover:border-sky-200/45 text-sky-100",
       badge: "bg-sky-200 text-slate-950",
+    };
+  }
+  if (accent === "teal") {
+    return {
+      card: "hover:border-cyan-200/45 text-cyan-100",
+      badge: "bg-cyan-200 text-slate-950",
     };
   }
   return {

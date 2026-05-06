@@ -56,11 +56,13 @@ function JupiterSimulatorPage() {
   const handleSelectBody = (bodyId) => {
     if (bodyId === "sun") navigate("/sun");
     if (bodyId === "earth") navigate("/earth");
+    if (bodyId === "black-hole") navigate("/black-hole");
     if (bodyId === "venus") navigate("/venus");
     if (bodyId === "mars") navigate("/mars");
     if (bodyId === "jupiter") setIsMenuOpen(false);
     if (bodyId === "saturn") navigate("/saturn");
     if (bodyId === "neptune") navigate("/neptune");
+    if (bodyId === "uranus") navigate("/uranus");
   };
 
   return (
