@@ -34,9 +34,28 @@ function createLabel(lat, lon, text, color) {
   return label;
 }
 
+function createStarSprite() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 64;
+  canvas.height = 64;
+  const ctx = canvas.getContext("2d");
+  const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 30);
+  gradient.addColorStop(0, "rgba(255,255,255,1)");
+  gradient.addColorStop(0.35, "rgba(220,235,255,0.8)");
+  gradient.addColorStop(0.72, "rgba(160,190,255,0.25)");
+  gradient.addColorStop(1, "rgba(160,190,255,0)");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
 function createStars(count, minRadius, spread, color, size, opacity) {
   const geometry = new THREE.BufferGeometry();
   const positions = new Float32Array(count * 3);
+  const starSprite = createStarSprite();
 
   for (let i = 0; i < count; i += 1) {
     const radius = minRadius + Math.random() * spread;
@@ -52,13 +71,63 @@ function createStars(count, minRadius, spread, color, size, opacity) {
     geometry,
     new THREE.PointsMaterial({
       color,
-      size,
+      map: starSprite,
+      size: Math.max(1, size * 5),
       blending: THREE.AdditiveBlending,
       depthWrite: false,
       transparent: true,
       opacity,
+      alphaTest: 0.08,
+      sizeAttenuation: false,
     }),
   );
+}
+
+function createMoonTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 256;
+  const ctx = canvas.getContext("2d");
+
+  const base = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  base.addColorStop(0, "#d8d8d0");
+  base.addColorStop(0.45, "#8f8f88");
+  base.addColorStop(1, "#c4c0b7");
+  ctx.fillStyle = base;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  for (let i = 0; i < 2200; i += 1) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const radius = Math.random() * 3 + 0.3;
+    ctx.fillStyle = Math.random() > 0.5 ? "rgba(255,255,255,0.16)" : "rgba(30,30,30,0.18)";
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  for (let i = 0; i < 38; i += 1) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const radius = Math.random() * 14 + 3;
+    const crater = ctx.createRadialGradient(x, y, radius * 0.15, x, y, radius);
+    crater.addColorStop(0, "rgba(45,45,45,0.55)");
+    crater.addColorStop(0.58, "rgba(115,115,110,0.28)");
+    crater.addColorStop(1, "rgba(230,230,220,0)");
+    ctx.fillStyle = crater;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(235,235,225,0.2)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(x, y, radius * 0.9, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
 }
 
 function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
@@ -98,15 +167,15 @@ function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
     controls.zoomSpeed = 1.2;
     controls.panSpeed = 0.5;
     controls.minDistance = 1.8;
-    controls.maxDistance = 10;
+    controls.maxDistance = 18;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.8;
     controls.enablePan = false;
     controls.target.set(0, 0, 0);
     controls.update();
 
-    const stars = createStars(2000, 40, 60, 0xffffff, 0.25, 0.9);
-    const closeStars = createStars(800, 15, 25, 0xaaccff, 0.15, 0.8);
+    const stars = createStars(2600, 95, 120, 0xf4f7ff, 0.32, 0.95);
+    const closeStars = createStars(850, 75, 90, 0xffffff, 0.2, 0.86);
     scene.add(stars, closeStars);
 
     const earthGroup = new THREE.Group();
@@ -165,6 +234,42 @@ function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
 
     scene.add(earthGroup);
 
+    const moonTexture = createMoonTexture();
+    const moonOrbitGroup = new THREE.Group();
+    moonOrbitGroup.rotation.x = 0.22;
+    moonOrbitGroup.rotation.z = -0.12;
+
+    const moonDistance = 7.2;
+    const moonMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(0.16, 96, 96),
+      new THREE.MeshStandardMaterial({
+        map: moonTexture,
+        bumpMap: moonTexture,
+        bumpScale: 0.012,
+        roughness: 0.92,
+        metalness: 0.0,
+      }),
+    );
+    moonMesh.position.set(moonDistance, 0, 0);
+    moonOrbitGroup.add(moonMesh);
+    scene.add(moonOrbitGroup);
+
+    const moonOrbitLine = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(
+        Array.from({ length: 257 }, (_, index) => {
+          const angle = (index / 256) * Math.PI * 2;
+          return new THREE.Vector3(Math.cos(angle) * moonDistance, 0, Math.sin(angle) * moonDistance);
+        }),
+      ),
+      new THREE.LineBasicMaterial({
+        color: 0x9fb7ff,
+        transparent: true,
+        opacity: 0.12,
+      }),
+    );
+    moonOrbitLine.rotation.copy(moonOrbitGroup.rotation);
+    scene.add(moonOrbitLine);
+
     const sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
     sunLight.position.set(10, 5, 15);
     scene.add(sunLight);
@@ -199,6 +304,7 @@ function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
       controls.update();
       if (controls.autoRotate) {
         earthGroup.rotation.y += 0.0016;
+        moonOrbitGroup.rotation.y += 0.00115;
       }
       cloudMesh.rotation.y += 0.00035;
       renderer.render(scene, camera);
@@ -218,15 +324,22 @@ function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
       earthTexture.dispose();
       bumpTexture.dispose();
       cloudTexture.dispose();
+      moonTexture.dispose();
       earthMesh.material.dispose();
       earthMesh.geometry.dispose();
+      moonMesh.material.dispose();
+      moonMesh.geometry.dispose();
+      moonOrbitLine.material.dispose();
+      moonOrbitLine.geometry.dispose();
       cloudMesh.material.dispose();
       cloudMesh.geometry.dispose();
       atmosphereMesh.material.dispose();
       atmosphereMesh.geometry.dispose();
       stars.geometry.dispose();
+      stars.material.map?.dispose();
       stars.material.dispose();
       closeStars.geometry.dispose();
+      closeStars.material.map?.dispose();
       closeStars.material.dispose();
       renderer.dispose();
       labelRenderer.domElement.remove();

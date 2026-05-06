@@ -159,7 +159,7 @@ function SunSimulatorPage() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black text-white" dir={isArabic ? "rtl" : "ltr"}>
+    <main className="relative min-h-screen overflow-hidden bg-black text-white"  dir={isArabic ? "rtl" : "ltr"}>
       <SunScene
         isPaused={isPaused}
         key={resetKey}
