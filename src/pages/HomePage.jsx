@@ -47,7 +47,7 @@ const simulators = [
     subtitle: { AR: "Earth Simulator", EN: "الأرض" },
     description: {
       AR: "كوكب تفاعلي ثلاثي الأبعاد مع دوران، تكبير، غيوم، إضاءة، وعلامات مدن.",
-      EN: "A 3D interactive planet with rotation, zoom, clouds, lighting, and city labels.",
+      EN: "A 3D interactive planet with rotation, zoom, clouds, lighting, and a more realistic surface.",
     },
     path: "/earth",
     status: "ready",
@@ -112,6 +112,18 @@ const simulators = [
     path: "/black-hole",
     status: "ready",
     accent: "violet",
+  },
+  {
+    id: "magnetar",
+    title: { AR: "محاكاة النجم النيوتروني المغناطيسي", EN: "Magnetar Simulator" },
+    subtitle: { AR: "Magnetar Simulator", EN: "النجم المغناطيسي" },
+    description: {
+      AR: "نجم نيوتروني شديد الكثافة مع مجال مغناطيسي متوهج، نفاثات قطبية، وهالة زرقاء بنفسجية مشحونة بالطاقة.",
+      EN: "An ultra-dense neutron star with glowing magnetic fields, polar jets, and a blue-violet halo charged with energy.",
+    },
+    path: "/magnetar",
+    status: "ready",
+    accent: "indigo",
   },
   {
     id: "saturn",
@@ -182,6 +194,12 @@ function getAccentClasses(accent) {
       badge: "bg-cyan-200 text-slate-950",
     };
   }
+  if (accent === "indigo") {
+    return {
+      card: "hover:border-indigo-200/45 text-indigo-100",
+      badge: "bg-indigo-200 text-slate-950",
+    };
+  }
   return {
     card: "hover:border-cyan-200/45 text-cyan-100",
     badge: "bg-cyan-200 text-slate-950",
@@ -189,7 +207,7 @@ function getAccentClasses(accent) {
 }
 
 function HomePage() {
-  const [language, setLanguage] = useState("AR");
+  const [language, setLanguage] = useState("EN");
   const text = copy[language];
 
   return (

@@ -46,7 +46,7 @@ const moonInfo = {
 
 function JupiterSimulatorPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("AR");
+  const [language, setLanguage] = useState("EN");
   const [isPaused, setIsPaused] = useState(false);
   const [selectedMoon, setSelectedMoon] = useState("io");
   const navigate = useNavigate();
@@ -57,6 +57,7 @@ function JupiterSimulatorPage() {
     if (bodyId === "sun") navigate("/sun");
     if (bodyId === "earth") navigate("/earth");
     if (bodyId === "black-hole") navigate("/black-hole");
+    if (bodyId === "magnetar") navigate("/magnetar");
     if (bodyId === "venus") navigate("/venus");
     if (bodyId === "mars") navigate("/mars");
     if (bodyId === "jupiter") setIsMenuOpen(false);

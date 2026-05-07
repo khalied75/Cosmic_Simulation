@@ -24,7 +24,7 @@ const copy = {
 
 function EarthSimulatorPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("AR");
+  const [language, setLanguage] = useState("EN");
   const [autoRotate, setAutoRotate] = useState(true);
   const navigate = useNavigate();
   const text = copy[language];
@@ -32,6 +32,7 @@ function EarthSimulatorPage() {
   const handleSelectBody = (bodyId) => {
     if (bodyId === "sun") navigate("/sun");
     if (bodyId === "black-hole") navigate("/black-hole");
+    if (bodyId === "magnetar") navigate("/magnetar");
     if (bodyId === "earth") setIsMenuOpen(false);
     if (bodyId === "venus") navigate("/venus");
     if (bodyId === "mars") navigate("/mars");

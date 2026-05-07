@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { lockSceneInteraction } from "./sceneInteractionLock";
 
 function createStars() {
   const count = 6800;
@@ -187,6 +188,7 @@ function UranusScene({ isPaused, onPausedChange, showAtmosphere = true, showRing
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.26;
     container.appendChild(renderer.domElement);
+    const releaseInteractionLock = lockSceneInteraction(container, renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -197,6 +199,7 @@ function UranusScene({ isPaused, onPausedChange, showAtmosphere = true, showRing
     controls.maxDistance = 22;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.16;
+    controls.enablePan = false;
 
     scene.add(createStars());
     scene.add(new THREE.AmbientLight(0x10282f, 0.92));
@@ -293,6 +296,7 @@ function UranusScene({ isPaused, onPausedChange, showAtmosphere = true, showRing
       uranusTexture.dispose();
       ringTexture.dispose();
       renderer.dispose();
+      releaseInteractionLock();
       renderer.domElement.remove();
     };
   }, [isPaused, onPausedChange, showAtmosphere, showRings]);

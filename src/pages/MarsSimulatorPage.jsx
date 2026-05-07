@@ -64,7 +64,7 @@ const copy = {
 
 function MarsSimulatorPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("AR");
+  const [language, setLanguage] = useState("EN");
   const [isPaused, setIsPaused] = useState(false);
   const [showAtmosphere, setShowAtmosphere] = useState(true);
   const [showMoons, setShowMoons] = useState(true);
@@ -77,6 +77,7 @@ function MarsSimulatorPage() {
     if (bodyId === "sun") navigate("/sun");
     if (bodyId === "earth") navigate("/earth");
     if (bodyId === "black-hole") navigate("/black-hole");
+    if (bodyId === "magnetar") navigate("/magnetar");
     if (bodyId === "venus") navigate("/venus");
     if (bodyId === "mars") setIsMenuOpen(false);
     if (bodyId === "jupiter") navigate("/jupiter");

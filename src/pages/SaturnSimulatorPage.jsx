@@ -28,7 +28,7 @@ const copy = {
 
 function SaturnSimulatorPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("AR");
+  const [language, setLanguage] = useState("EN");
   const [isPaused, setIsPaused] = useState(false);
   const [showRings, setShowRings] = useState(true);
   const navigate = useNavigate();
@@ -39,6 +39,7 @@ function SaturnSimulatorPage() {
     if (bodyId === "sun") navigate("/sun");
     if (bodyId === "earth") navigate("/earth");
     if (bodyId === "black-hole") navigate("/black-hole");
+    if (bodyId === "magnetar") navigate("/magnetar");
     if (bodyId === "venus") navigate("/venus");
     if (bodyId === "mars") navigate("/mars");
     if (bodyId === "jupiter") navigate("/jupiter");

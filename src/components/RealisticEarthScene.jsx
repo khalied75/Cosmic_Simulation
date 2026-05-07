@@ -1,38 +1,11 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { lockSceneInteraction } from "./sceneInteractionLock";
 
 const EARTH_MAP = "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg";
 const EARTH_BUMP = "https://threejs.org/examples/textures/planets/earth_normal_2048.jpg";
 const CLOUD_MAP = "https://threejs.org/examples/textures/planets/earth_clouds_1024.png";
-
-const cities = [
-  { lat: 31.9539, lon: 35.9106, ar: "عمّان", en: "Amman", color: "#aaddff" },
-  { lat: 30.0444, lon: 31.2357, ar: "القاهرة", en: "Cairo", color: "#aaffaa" },
-  { lat: 25.2048, lon: 55.2708, ar: "دبي", en: "Dubai", color: "#aaccff" },
-  { lat: 51.5074, lon: -0.1278, ar: "لندن", en: "London", color: "#ffaaaa" },
-  { lat: 35.6895, lon: 139.6917, ar: "طوكيو", en: "Tokyo", color: "#ffaaaa" },
-  { lat: 40.7128, lon: -74.006, ar: "نيويورك", en: "New York", color: "#ffaaaa" },
-];
-
-function createLabel(lat, lon, text, color) {
-  const radius = 1.88;
-  const phi = ((90 - lat) * Math.PI) / 180;
-  const theta = (lon * Math.PI) / 180;
-  const x = radius * Math.sin(phi) * Math.cos(theta);
-  const y = radius * Math.cos(phi);
-  const z = radius * Math.sin(phi) * Math.sin(theta);
-
-  const labelElement = document.createElement("div");
-  labelElement.textContent = text;
-  labelElement.className = "earth-label";
-  labelElement.style.color = color;
-
-  const label = new CSS2DObject(labelElement);
-  label.position.set(x, y, z);
-  return label;
-}
 
 function createStarSprite() {
   const canvas = document.createElement("canvas");
@@ -130,7 +103,7 @@ function createMoonTexture() {
   return texture;
 }
 
-function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
+function RealisticEarthScene({ onAutoRotateChange }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -152,13 +125,7 @@ function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setClearColor(0x0a0a1a);
     container.appendChild(renderer.domElement);
-
-    const labelRenderer = new CSS2DRenderer();
-    labelRenderer.domElement.className = "earth-label-layer";
-    labelRenderer.domElement.style.position = "absolute";
-    labelRenderer.domElement.style.inset = "0";
-    labelRenderer.domElement.style.pointerEvents = "none";
-    container.appendChild(labelRenderer.domElement);
+    const releaseInteractionLock = lockSceneInteraction(container, renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -226,12 +193,6 @@ function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
     );
     earthGroup.add(atmosphereMesh);
 
-    cities.forEach((city) => {
-      earthGroup.add(
-        createLabel(city.lat, city.lon, language === "AR" ? city.ar : city.en, city.color),
-      );
-    });
-
     scene.add(earthGroup);
 
     const moonTexture = createMoonTexture();
@@ -297,7 +258,6 @@ function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
       camera.aspect = clientWidth / clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(clientWidth, clientHeight);
-      labelRenderer.setSize(clientWidth, clientHeight);
     };
 
     const animate = () => {
@@ -308,7 +268,6 @@ function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
       }
       cloudMesh.rotation.y += 0.00035;
       renderer.render(scene, camera);
-      labelRenderer.render(scene, camera);
       frameId = requestAnimationFrame(animate);
     };
 
@@ -342,10 +301,10 @@ function RealisticEarthScene({ language = "AR", onAutoRotateChange }) {
       closeStars.material.map?.dispose();
       closeStars.material.dispose();
       renderer.dispose();
-      labelRenderer.domElement.remove();
+      releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [language, onAutoRotateChange]);
+  }, [onAutoRotateChange]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

@@ -137,7 +137,7 @@ const layers = [
 
 function SunSimulatorPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("AR");
+  const [language, setLanguage] = useState("EN");
   const [isPaused, setIsPaused] = useState(false);
   const [showFlares, setShowFlares] = useState(true);
   const [showCorona, setShowCorona] = useState(true);
@@ -151,6 +151,7 @@ function SunSimulatorPage() {
   const handleSelectBody = (bodyId) => {
     if (bodyId === "earth") navigate("/earth");
     if (bodyId === "black-hole") navigate("/black-hole");
+    if (bodyId === "magnetar") navigate("/magnetar");
     if (bodyId === "venus") navigate("/venus");
     if (bodyId === "mars") navigate("/mars");
     if (bodyId === "jupiter") navigate("/jupiter");
@@ -224,7 +225,7 @@ function SunSimulatorPage() {
         </div>
       </section> */}
 
-      <aside className={`pointer-events-auto fixed top-32 z-20 hidden w-80 space-y-4 xl:block ${isArabic ? "left-5" : "right-5"}`}>
+      {/* <aside className={`pointer-events-auto fixed top-32 z-20 hidden w-80 space-y-4 xl:block ${isArabic ? "left-5" : "right-5"}`}>
         <section className="max-h-[calc(100vh-10rem)] overflow-y-auto rounded-xl border border-orange-200/22 bg-black/50 p-5 shadow-2xl shadow-orange-950/25 backdrop-blur-2xl">
           <h3 className="text-xl font-bold text-orange-200">{isArabic ? activeLayer.ar : activeLayer.en}</h3>
           <p className="mt-3 text-sm leading-7 text-white/70">{isArabic ? activeLayer.arText : activeLayer.enText}</p>
@@ -233,7 +234,7 @@ function SunSimulatorPage() {
             <span className="rounded-full border border-orange-200/18 bg-orange-200/10 px-3 py-1">{isArabic ? "بلازما" : "Plasma"}</span>
             <span className="rounded-full border border-orange-200/18 bg-orange-200/10 px-3 py-1">{isArabic ? "نجم قزم أصفر" : "Yellow dwarf"}</span>
           </div>
-        </section>
+        </section> */}
 
         {/* <section className="rounded-xl border border-orange-200/22 bg-black/50 p-5 shadow-2xl shadow-orange-950/25 backdrop-blur-2xl">
           <h4 className="text-lg font-bold text-orange-200">{text.statsTitle}</h4>
@@ -246,7 +247,7 @@ function SunSimulatorPage() {
             ))}
           </div>
         </section> */}
-      </aside>
+      {/* </aside> */}
 
       <aside className={`pointer-events-auto fixed top-24 z-20 hidden w-60 lg:block ${isArabic ? "right-5" : "left-5"}`}>
         <section className="max-h-[calc(100vh-9rem)] overflow-y-auto rounded-xl border border-orange-200/22 bg-black/50 p-4 shadow-2xl shadow-orange-950/25 backdrop-blur-2xl">

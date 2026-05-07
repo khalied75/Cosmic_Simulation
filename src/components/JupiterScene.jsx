@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { lockSceneInteraction } from "./sceneInteractionLock";
 import jupiterMoons from "../data/jupiterMoons";
 
 function createJupiterTexture() {
@@ -144,6 +145,7 @@ function JupiterScene({ isPaused, onPausedChange }) {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.35;
     container.appendChild(renderer.domElement);
+    const releaseInteractionLock = lockSceneInteraction(container, renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -154,6 +156,7 @@ function JupiterScene({ isPaused, onPausedChange }) {
     controls.maxDistance = 30;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.25;
+    controls.enablePan = false;
     controls.target.set(0, 0, 0);
 
     scene.add(createStars());
@@ -264,6 +267,7 @@ function JupiterScene({ isPaused, onPausedChange }) {
       jupiterTexture.dispose();
       moonTextures.forEach((texture) => texture.dispose());
       renderer.dispose();
+      releaseInteractionLock();
       renderer.domElement.remove();
     };
   }, [isPaused, onPausedChange]);

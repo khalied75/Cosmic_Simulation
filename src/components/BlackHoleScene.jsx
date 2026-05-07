@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { lockSceneInteraction } from "./sceneInteractionLock";
 
 function createGlowTexture() {
   const canvas = document.createElement("canvas");
@@ -52,11 +53,12 @@ function createAccretionTexture() {
       const dy = y / size - 0.5;
       const radius = Math.sqrt(dx * dx + dy * dy) * 2;
       const angle = Math.atan2(dy, dx);
-      const spiral = Math.sin(angle * 22 + radius * 68) * 0.5 + 0.5;
-      const turbulence = Math.sin(dx * 34) * Math.cos(dy * 41) * 0.5 + 0.5;
-      const noise = Math.random() * 0.3 + spiral * 0.45 + turbulence * 0.25;
+      const spiral = Math.sin(angle * 24 + radius * 76) * 0.5 + 0.5;
+      const turbulence = Math.sin(dx * 38) * Math.cos(dy * 45) * 0.5 + 0.5;
+      const noise = Math.random() * 0.22 + spiral * 0.5 + turbulence * 0.26;
       const falloff = Math.max(0, 1 - Math.pow(radius, 1.38));
-      const brightness = noise * falloff;
+      const bandBoost = Math.max(0, 1 - Math.abs(radius - 0.48) * 1.9);
+      const brightness = noise * falloff * (0.9 + bandBoost * 0.75);
       const index = (y * size + x) * 4;
 
       image.data[index] = 255;
@@ -116,11 +118,57 @@ function createStars() {
   return points;
 }
 
-function createPlanet({ radius, color, position, ring = false }) {
+function createPlanetTexture(stops, details = []) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1024;
+  canvas.height = 512;
+  const ctx = canvas.getContext("2d");
+
+  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  stops.forEach(([stop, color]) => gradient.addColorStop(stop, color));
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  for (let y = 0; y < canvas.height; y += 1) {
+    const wave = Math.sin(y * 0.018) + Math.sin(y * 0.044) * 0.5;
+    ctx.fillStyle = wave > 0 ? `rgba(255,255,255,${0.025 + wave * 0.03})` : `rgba(0,0,0,${0.03 + Math.abs(wave) * 0.035})`;
+    ctx.fillRect(0, y, canvas.width, 1);
+  }
+
+  for (let i = 0; i < 2500; i += 1) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const radius = Math.random() * 3 + 0.3;
+    ctx.fillStyle = Math.random() > 0.5 ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.16)";
+    ctx.beginPath();
+    ctx.ellipse(x, y, radius * (1.2 + Math.random() * 3), radius * 0.45, Math.random() * Math.PI, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  details.forEach((detail) => {
+    const x = canvas.width * detail.x;
+    const y = canvas.height * detail.y;
+    const gradientDetail = ctx.createRadialGradient(x, y, 8, x, y, detail.radius);
+    gradientDetail.addColorStop(0, detail.inner);
+    gradientDetail.addColorStop(0.52, detail.mid);
+    gradientDetail.addColorStop(1, detail.outer);
+    ctx.fillStyle = gradientDetail;
+    ctx.beginPath();
+    ctx.ellipse(x, y, detail.radius * 1.2, detail.radius * 0.55, detail.rotation, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  return texture;
+}
+
+function createPlanet({ radius, position, ring = false, textureStops, textureDetails }) {
   const group = new THREE.Group();
+  const texture = createPlanetTexture(textureStops, textureDetails);
   const planet = new THREE.Mesh(
     new THREE.SphereGeometry(radius, 48, 48),
-    new THREE.MeshStandardMaterial({ color, roughness: 0.78 }),
+    new THREE.MeshStandardMaterial({ map: texture, roughness: 0.78 }),
   );
   group.add(planet);
 
@@ -139,6 +187,7 @@ function createPlanet({ radius, color, position, ring = false }) {
 
   group.position.copy(position);
   group.userData.planet = planet;
+  group.userData.texture = texture;
   return group;
 }
 
@@ -154,7 +203,7 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
     scene.fog = new THREE.FogExp2(0x010208, 0.0085);
 
     const camera = new THREE.PerspectiveCamera(58, 1, 0.1, 1400);
-    camera.position.set(0, 5.8, 18);
+    camera.position.set(0, 6.2, 20.5);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -162,6 +211,7 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.3;
     container.appendChild(renderer.domElement);
+    const releaseInteractionLock = lockSceneInteraction(container, renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -170,9 +220,10 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
     controls.maxDistance = 60;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.2;
+    controls.enablePan = false;
 
     scene.add(new THREE.AmbientLight(0x29354d, 0.55));
-    const warmLight = new THREE.PointLight(0xff9a2f, 7, 95, 1.6);
+    const warmLight = new THREE.PointLight(0xff9a2f, 8.5, 105, 1.5);
     warmLight.position.set(0, 3, 5);
     scene.add(warmLight);
     const coolLight = new THREE.PointLight(0x655dff, 2.5, 120, 1.8);
@@ -188,13 +239,13 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
     scene.add(blackHoleGroup);
 
     const eventHorizon = new THREE.Mesh(
-      new THREE.SphereGeometry(2.18, 144, 144),
+      new THREE.SphereGeometry(2.78, 160, 160),
       new THREE.MeshBasicMaterial({ color: 0x000000 }),
     );
     blackHoleGroup.add(eventHorizon);
 
     const lensShell = new THREE.Mesh(
-      new THREE.SphereGeometry(2.5, 96, 96),
+      new THREE.SphereGeometry(3.15, 112, 112),
       new THREE.ShaderMaterial({
         transparent: true,
         depthWrite: false,
@@ -219,7 +270,7 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
             vec3 viewDirection = normalize(cameraPositionWorld - vWorldPosition);
             float fresnel = pow(1.0 - abs(dot(viewDirection, vNormal)), 3.5);
             vec3 color = mix(vec3(0.34, 0.12, 1.0), vec3(1.0, 0.42, 0.08), fresnel);
-            gl_FragColor = vec4(color, fresnel * 0.24);
+            gl_FragColor = vec4(color, fresnel * 0.28);
           }
         `,
       }),
@@ -227,11 +278,11 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
     blackHoleGroup.add(lensShell);
 
     const photonRing = new THREE.Mesh(
-      new THREE.TorusGeometry(2.32, 0.075, 32, 320),
+      new THREE.TorusGeometry(2.9, 0.06, 28, 320),
       new THREE.MeshBasicMaterial({
-        color: 0xffdfb8,
+        color: 0xffc896,
         transparent: true,
-        opacity: 0.96,
+        opacity: 0.72,
       }),
     );
     photonRing.rotation.x = Math.PI / 2;
@@ -247,7 +298,7 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
         depthWrite: false,
       }),
     );
-    hotGlow.scale.set(17, 17, 1);
+    hotGlow.scale.set(21, 21, 1);
     blackHoleGroup.add(hotGlow);
 
     const coolGlow = new THREE.Sprite(
@@ -260,8 +311,32 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
         depthWrite: false,
       }),
     );
-    coolGlow.scale.set(28, 28, 1);
+    coolGlow.scale.set(34, 34, 1);
     blackHoleGroup.add(coolGlow);
+
+    const hawkingJet = new THREE.Group();
+    const jetMaterial = new THREE.SpriteMaterial({
+      map: glowTexture,
+      color: 0x9ac7ff,
+      transparent: true,
+      opacity: 0.18,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    for (let i = 0; i < 7; i += 1) {
+      const sprite = new THREE.Sprite(jetMaterial);
+      const scale = 2.1 + i * 1.35;
+      sprite.scale.set(0.7 + i * 0.2, scale, 1);
+      sprite.position.y = 2.8 + i * 1.45;
+      hawkingJet.add(sprite);
+
+      const mirrored = sprite.clone();
+      mirrored.position.y = -sprite.position.y;
+      mirrored.material = jetMaterial;
+      hawkingJet.add(mirrored);
+    }
+    hawkingJet.rotation.z = 0.12;
+    blackHoleGroup.add(hawkingJet);
 
     const diskMaterial = new THREE.ShaderMaterial({
       transparent: true,
@@ -292,58 +367,107 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
           float r = length(p) * 2.0;
           float angle = atan(p.y, p.x);
 
-          float inner = smoothstep(0.19, 0.34, r);
-          float outer = 1.0 - smoothstep(0.82, 1.05, r);
+          float inner = smoothstep(0.22, 0.37, r);
+          float outer = 1.0 - smoothstep(0.9, 1.1, r);
           float band = inner * outer;
 
-          float warped = angle / 6.28318 + uTime * (0.14 / max(r, 0.24));
-          vec2 sampleUv = vec2(warped, r * 1.9 - uTime * 0.12);
+          float warped = angle / 6.28318 + uTime * (0.16 / max(r, 0.26));
+          vec2 sampleUv = vec2(warped, r * 2.1 - uTime * 0.13);
           vec4 tex = texture2D(uTexture, sampleUv);
 
-          float hot = pow(max(0.0, 1.0 - abs(r - 0.36) * 2.7), 3.4);
-          float mid = pow(max(0.0, 1.0 - abs(r - 0.55) * 2.2), 2.2);
-          float doppler = smoothstep(-1.0, 1.0, sin(angle - 0.9)) * 1.45 + 0.3;
+          float hot = pow(max(0.0, 1.0 - abs(r - 0.4) * 3.0), 3.9);
+          float mid = pow(max(0.0, 1.0 - abs(r - 0.58) * 2.2), 2.5);
+          float dense = pow(max(0.0, 1.0 - abs(r - 0.5) * 2.25), 2.1);
+          float doppler = smoothstep(-1.0, 1.0, sin(angle - 0.82)) * 1.58 + 0.24;
+          float turbulence = sin(angle * 10.0 - uTime * 1.9 + r * 12.0) * 0.5 + 0.5;
 
           vec3 cold = vec3(0.26, 0.05, 0.95);
           vec3 warm = vec3(1.0, 0.28, 0.02);
           vec3 whiteHot = vec3(1.0, 0.95, 0.72);
 
           vec3 color = mix(cold, warm, smoothstep(0.24, 0.8, r));
-          color = mix(color, whiteHot, hot * 0.85 + mid * 0.2);
-          color *= tex.rgb * (0.7 + doppler);
+          color = mix(color, whiteHot, hot * 0.98 + mid * 0.26 + dense * 0.16);
+          color *= tex.rgb * (0.8 + doppler + turbulence * 0.24 + dense * 0.26);
 
-          float alpha = band * tex.a * (0.8 + hot * 1.3 + mid * 0.4);
+          float alpha = band * tex.a * (1.08 + hot * 1.65 + mid * 0.68 + dense * 1.05);
           gl_FragColor = vec4(color, alpha);
         }
       `,
     });
 
     const disk = new THREE.Mesh(
-      new THREE.RingGeometry(2.46, 10.6, 520, 92),
+      new THREE.RingGeometry(3.08, 11.6, 640, 100),
       diskMaterial,
     );
     disk.rotation.x = Math.PI / 2.62;
+    disk.scale.set(1.18, 0.98, 1);
     blackHoleGroup.add(disk);
 
     const secondaryDisk = new THREE.Mesh(
-      new THREE.RingGeometry(2.62, 8.2, 360, 64),
+      new THREE.RingGeometry(3.22, 9.3, 420, 72),
       new THREE.MeshBasicMaterial({
-        color: 0xff7b1a,
+        color: 0xff8f3a,
         transparent: true,
-        opacity: 0.08,
+        opacity: 0.06,
         blending: THREE.AdditiveBlending,
         side: THREE.DoubleSide,
         depthWrite: false,
       }),
     );
     secondaryDisk.rotation.x = Math.PI / 2.38;
+    secondaryDisk.scale.set(0.94, 0.72, 1);
     blackHoleGroup.add(secondaryDisk);
 
     const planets = [
-      createPlanet({ radius: 0.66, color: 0x2f8cff, position: new THREE.Vector3(-9, 0, -9) }),
-      createPlanet({ radius: 1.28, color: 0xc28a52, position: new THREE.Vector3(10, 0, -14) }),
-      createPlanet({ radius: 0.86, color: 0x315bff, position: new THREE.Vector3(-14, 0, 7) }),
-      createPlanet({ radius: 0.98, color: 0xd9b46f, position: new THREE.Vector3(13, 0, 5), ring: true }),
+      createPlanet({
+        radius: 0.72,
+        position: new THREE.Vector3(-10, 0, -10),
+        textureStops: [
+          [0, "#2b86dd"],
+          [0.55, "#1a4f93"],
+          [1, "#e1d09d"],
+        ],
+        textureDetails: [
+          { x: 0.36, y: 0.42, radius: 48, rotation: -0.25, inner: "rgba(214,180,110,0.55)", mid: "rgba(90,70,40,0.2)", outer: "rgba(0,0,0,0)" },
+        ],
+      }),
+      createPlanet({
+        radius: 1.36,
+        position: new THREE.Vector3(11, 0, -14.5),
+        textureStops: [
+          [0, "#e4c091"],
+          [0.22, "#a96a39"],
+          [0.48, "#f0dfbe"],
+          [0.7, "#8d5128"],
+          [1, "#d5ae80"],
+        ],
+      }),
+      createPlanet({
+        radius: 0.92,
+        position: new THREE.Vector3(-14.5, 0, 7.5),
+        textureStops: [
+          [0, "#5d76ff"],
+          [0.34, "#2d4dd1"],
+          [0.66, "#76c8ff"],
+          [1, "#112d8d"],
+        ],
+        textureDetails: [
+          { x: 0.5, y: 0.54, radius: 60, rotation: -0.18, inner: "rgba(240,250,255,0.35)", mid: "rgba(90,170,255,0.18)", outer: "rgba(0,0,0,0)" },
+        ],
+      }),
+      createPlanet({
+        radius: 1.02,
+        position: new THREE.Vector3(13.5, 0, 5.5),
+        ring: true,
+        textureStops: [
+          [0, "#f4e7c9"],
+          [0.2, "#ceb188"],
+          [0.4, "#b38f62"],
+          [0.62, "#e7d2ab"],
+          [0.82, "#a67e54"],
+          [1, "#efe1c5"],
+        ],
+      }),
     ];
     planets.forEach((planet) => scene.add(planet));
 
@@ -385,6 +509,8 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
         photonRing.scale.setScalar(1 + Math.sin(time * 2.2) * 0.018);
         hotGlow.material.opacity = 0.82 + Math.sin(time * 1.4) * 0.08;
         coolGlow.material.opacity = 0.18 + Math.sin(time * 0.8) * 0.04;
+        hawkingJet.scale.y = 1 + Math.sin(time * 2.6) * 0.05;
+        hawkingJet.rotation.y += 0.004;
       }
 
       renderer.render(scene, camera);
@@ -413,11 +539,13 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
       photonRing.material.dispose();
       hotGlow.material.dispose();
       coolGlow.material.dispose();
+      jetMaterial.dispose();
       disk.geometry.dispose();
       diskMaterial.dispose();
       secondaryDisk.geometry.dispose();
       secondaryDisk.material.dispose();
       planets.forEach((planet) => {
+        planet.userData.texture.dispose();
         planet.userData.planet.geometry.dispose();
         planet.userData.planet.material.dispose();
         planet.children.forEach((child) => {
@@ -428,6 +556,7 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
         });
       });
       renderer.dispose();
+      releaseInteractionLock();
       renderer.domElement.remove();
     };
   }, [isPaused, onPausedChange, showPlanets, showStars]);

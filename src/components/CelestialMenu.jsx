@@ -60,6 +60,16 @@ const bodies = [
     color: "bg-violet-300",
   },
   {
+    id: "magnetar",
+    name: "Magnetar",
+    arabicName: "النجم النيوتروني المغناطيسي",
+    type: "Neutron Star",
+    arabicType: "نجم مضغوط",
+    status: "Ready",
+    arabicStatus: "جاهز",
+    color: "bg-indigo-300",
+  },
+  {
     id: "saturn",
     name: "Saturn",
     arabicName: "زحل",

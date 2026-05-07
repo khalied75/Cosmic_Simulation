@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { lockSceneInteraction } from "./sceneInteractionLock";
 
 function createStars() {
   const count = 8000;
@@ -288,6 +289,7 @@ function SunScene({ isPaused, onPausedChange, showCorona = true, showFlares = tr
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.8;
     container.appendChild(renderer.domElement);
+    const releaseInteractionLock = lockSceneInteraction(container, renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -298,6 +300,7 @@ function SunScene({ isPaused, onPausedChange, showCorona = true, showFlares = tr
     controls.maxDistance = 30;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.15;
+    controls.enablePan = false;
     controls.target.set(0, 0, 0);
 
     scene.add(createStars());
@@ -416,6 +419,7 @@ function SunScene({ isPaused, onPausedChange, showCorona = true, showFlares = tr
       controls.dispose();
       solarTexture.dispose();
       renderer.dispose();
+      releaseInteractionLock();
       renderer.domElement.remove();
     };
   }, [isPaused, onPausedChange, selectedLayer, showCorona, showFlares]);

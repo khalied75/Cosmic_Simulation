@@ -4,6 +4,7 @@ import BlackHoleSimulatorPage from "./pages/BlackHoleSimulatorPage";
 import EarthSimulatorPage from "./pages/EarthSimulatorPage";
 import HomePage from "./pages/HomePage";
 import JupiterSimulatorPage from "./pages/JupiterSimulatorPage";
+import MagnetarSimulatorPage from "./pages/MagnetarSimulatorPage";
 import MarsSimulatorPage from "./pages/MarsSimulatorPage";
 import NeptuneSimulatorPage from "./pages/NeptuneSimulatorPage";
 import SaturnSimulatorPage from "./pages/SaturnSimulatorPage";
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/black-hole",
         element: <BlackHoleSimulatorPage />,
+      },
+      {
+        path: "/magnetar",
+        element: <MagnetarSimulatorPage />,
       },
       {
         path: "/venus",

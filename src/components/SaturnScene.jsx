@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { lockSceneInteraction } from "./sceneInteractionLock";
 import saturnMoons from "../data/saturnMoons";
 
 function createSaturnTexture() {
@@ -159,6 +160,7 @@ function SaturnScene({ isPaused, onPausedChange, showRings = true }) {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.3;
     container.appendChild(renderer.domElement);
+    const releaseInteractionLock = lockSceneInteraction(container, renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -169,6 +171,7 @@ function SaturnScene({ isPaused, onPausedChange, showRings = true }) {
     controls.maxDistance = 35;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.2;
+    controls.enablePan = false;
     controls.target.set(0, 0, 0);
 
     scene.add(createStars());
@@ -293,6 +296,7 @@ function SaturnScene({ isPaused, onPausedChange, showRings = true }) {
       ringTexture.dispose();
       moonTextures.forEach((texture) => texture.dispose());
       renderer.dispose();
+      releaseInteractionLock();
       renderer.domElement.remove();
     };
   }, [isPaused, onPausedChange, showRings]);

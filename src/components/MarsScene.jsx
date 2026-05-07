@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { lockSceneInteraction } from "./sceneInteractionLock";
 
 function createStars() {
   const count = 6500;
@@ -307,6 +308,7 @@ function MarsScene({ isPaused, onPausedChange, showAtmosphere = true, showMoons 
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.55;
     container.appendChild(renderer.domElement);
+    const releaseInteractionLock = lockSceneInteraction(container, renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -317,6 +319,7 @@ function MarsScene({ isPaused, onPausedChange, showAtmosphere = true, showMoons 
     controls.maxDistance = 20;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.24;
+    controls.enablePan = false;
     controls.target.set(0, 0, 0);
 
     scene.add(createStars());
@@ -465,6 +468,7 @@ function MarsScene({ isPaused, onPausedChange, showAtmosphere = true, showMoons 
       bumpTexture.dispose();
       moonTextures.forEach((texture) => texture.dispose());
       renderer.dispose();
+      releaseInteractionLock();
       renderer.domElement.remove();
     };
   }, [isPaused, onPausedChange, showAtmosphere, showDust, showMoons]);

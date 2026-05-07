@@ -60,7 +60,7 @@ const copy = {
 
 function BlackHoleSimulatorPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("AR");
+  const [language, setLanguage] = useState("EN");
   const [isPaused, setIsPaused] = useState(false);
   const [showPlanets, setShowPlanets] = useState(true);
   const [showStars, setShowStars] = useState(true);
@@ -71,6 +71,7 @@ function BlackHoleSimulatorPage() {
   const handleSelectBody = (bodyId) => {
     if (bodyId === "sun") navigate("/sun");
     if (bodyId === "earth") navigate("/earth");
+    if (bodyId === "magnetar") navigate("/magnetar");
     if (bodyId === "venus") navigate("/venus");
     if (bodyId === "uranus") navigate("/uranus");
     if (bodyId === "mars") navigate("/mars");
@@ -119,14 +120,14 @@ function BlackHoleSimulatorPage() {
         </div>
       </header>
 
-      <section className="pointer-events-none fixed left-1/2 top-5 z-20 hidden -translate-x-1/2 text-center sm:block">
+      {/* <section className="pointer-events-none fixed left-1/2 top-5 z-20 hidden -translate-x-1/2 text-center sm:block">
         <div className="rounded-full border border-violet-100/30 bg-gradient-to-r from-violet-950/92 via-orange-600/84 to-violet-800/92 px-8 py-3 shadow-[0_0_42px_rgba(164,109,255,0.28)]">
           <h1 className="text-2xl font-black text-white drop-shadow-[0_0_18px_rgba(255,210,165,0.86)] md:text-4xl">{text.title}</h1>
           <p className="mt-1 text-xs font-semibold tracking-[0.18em] text-violet-50/90 md:text-sm">{text.subtitle}</p>
         </div>
-      </section>
+      </section> */}
 
-      <aside className={`pointer-events-auto fixed top-28 z-20 hidden w-80 space-y-4 xl:block ${isArabic ? "left-5" : "right-5"}`}>
+      {/* <aside className={`pointer-events-auto fixed top-28 z-20 hidden w-80 space-y-4 xl:block ${isArabic ? "left-5" : "right-5"}`}>
         <section className="rounded-xl border border-violet-200/20 bg-black/48 p-5 shadow-2xl shadow-black/30 backdrop-blur-2xl">
           <h3 className="text-xl font-bold text-violet-200">{text.infoTitle}</h3>
           <p className="mt-3 text-sm leading-7 text-white/68">{text.info}</p>
@@ -143,7 +144,7 @@ function BlackHoleSimulatorPage() {
             ))}
           </div>
         </section>
-      </aside>
+      </aside> */}
 
       <div className="pointer-events-none fixed bottom-5 left-5 right-5 z-20 flex flex-wrap items-end justify-between gap-3">
         <div className="rounded-full border border-violet-200/16 bg-black/52 px-5 py-3 text-sm text-white/78 shadow-xl shadow-black/25 backdrop-blur-xl">
