@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
+import SimulationSound from "../components/SimulationSound";
 import VenusScene from "../components/VenusScene";
 
 const copy = {
@@ -95,6 +96,7 @@ function VenusSimulatorPage() {
         showClouds={showClouds}
         showSurface={showSurface}
       />
+      <SimulationSound language={language} tone="yellow" videoId="OM8CY9ugJKI" />
 
       <button
         aria-label={text.menuLabel}

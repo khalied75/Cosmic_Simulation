@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
+import SimulationSound from "../components/SimulationSound";
 import UranusScene from "../components/UranusScene";
 
 const copy = {
@@ -89,6 +90,7 @@ function UranusSimulatorPage() {
         showAtmosphere={showAtmosphere}
         showRings={showRings}
       />
+      <SimulationSound language={language} tone="cyan" videoId="yXfJG1gs3b4" />
 
       <button
         aria-label={text.menuLabel}

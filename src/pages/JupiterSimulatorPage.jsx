@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
 import JupiterScene from "../components/JupiterScene";
+import SimulationSound from "../components/SimulationSound";
 import jupiterMoons from "../data/jupiterMoons";
 
 const copy = {
@@ -72,6 +73,7 @@ function JupiterSimulatorPage() {
       dir={isArabic ? "rtl" : "ltr"}
     >
       <JupiterScene isPaused={isPaused} onPausedChange={setIsPaused} />
+      <SimulationSound language={language} tone="amber" videoId="UChzxK9gknM" />
 
       <button
         aria-label={text.menuLabel}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
+import SimulationSound from "../components/SimulationSound";
 import SunScene from "../components/SunScene";
 
 const copy = {
@@ -171,6 +172,7 @@ function SunSimulatorPage() {
         showCorona={showCorona}
         showFlares={showFlares}
       />
+      <SimulationSound language={language} tone="orange" videoId="50kwxyFQalI" />
 
       <button
         aria-label={text.menuLabel}

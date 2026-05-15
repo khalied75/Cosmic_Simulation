@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BlackHoleScene from "../components/BlackHoleScene";
 import CelestialMenu from "../components/CelestialMenu";
+import SimulationSound from "../components/SimulationSound";
 
 const copy = {
   AR: {
@@ -89,6 +90,7 @@ function BlackHoleSimulatorPage() {
         showPlanets={showPlanets}
         showStars={showStars}
       />
+      <SimulationSound language={language} tone="indigo" videoId="OqMPbBj4I4w" />
 
       <button
         aria-label={text.menuLabel}

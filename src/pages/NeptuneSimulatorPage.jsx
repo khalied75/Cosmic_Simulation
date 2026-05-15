@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
 import NeptuneScene from "../components/NeptuneScene";
+import SimulationSound from "../components/SimulationSound";
 
 const copy = {
   AR: {
@@ -84,6 +85,7 @@ function NeptuneSimulatorPage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#000006] text-white" dir={isArabic ? "rtl" : "ltr"}>
       <NeptuneScene isPaused={isPaused} onPausedChange={setIsPaused} showAtmosphere={showAtmosphere} showRings={showRings} />
+      <SimulationSound language={language} tone="sky" videoId="a4St5udp4rc" />
 
       <button
         aria-label={text.menuLabel}

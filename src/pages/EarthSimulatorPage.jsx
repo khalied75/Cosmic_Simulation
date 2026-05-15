@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
 import RealisticEarthScene from "../components/RealisticEarthScene";
+import SimulationSound from "../components/SimulationSound";
 
 const copy = {
   AR: {
@@ -48,6 +49,7 @@ function EarthSimulatorPage() {
       dir={language === "AR" ? "rtl" : "ltr"}
     >
       <RealisticEarthScene language={language} onAutoRotateChange={setAutoRotate} />
+      <SimulationSound language={language} tone="cyan" videoId="_KbrOYcBXxc" />
 
       <button
         aria-label={text.menuLabel}

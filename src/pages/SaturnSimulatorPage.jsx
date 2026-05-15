@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
 import SaturnScene from "../components/SaturnScene";
+import SimulationSound from "../components/SimulationSound";
 
 const copy = {
   AR: {
@@ -58,6 +59,7 @@ function SaturnSimulatorPage() {
         onPausedChange={setIsPaused}
         showRings={showRings}
       />
+      <SimulationSound language={language} tone="amber" videoId="hWHLCHv4PiI" />
 
       <button
         aria-label={text.menuLabel}

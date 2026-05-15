@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
 import MarsScene from "../components/MarsScene";
+import SimulationSound from "../components/SimulationSound";
 
 const copy = {
   AR: {
@@ -95,6 +96,7 @@ function MarsSimulatorPage() {
         showDust={showDust}
         showMoons={showMoons}
       />
+      <SimulationSound language={language} tone="orange" videoId="QP60x-hS5cs" />
 
       <button
         aria-label={text.menuLabel}

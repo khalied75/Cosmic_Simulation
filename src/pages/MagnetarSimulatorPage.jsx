@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CelestialMenu from "../components/CelestialMenu";
 import MagnetarScene from "../components/MagnetarScene";
+import SimulationSound from "../components/SimulationSound";
 
 const copy = {
   AR: {
@@ -95,6 +96,7 @@ function MagnetarSimulatorPage() {
         showJets={showJets}
         showBurst={showBurst}
       />
+      <SimulationSound language={language} tone="indigo" videoId="LQm9X3KjTjk" />
 
       <button
         aria-label={text.menuLabel}
