@@ -60,11 +60,21 @@ const bodies = [
     color: "bg-violet-300",
   },
   {
+    id: "milky-way",
+    name: "Milky Way",
+    arabicName: "درب التبانة",
+    type: "Galaxy",
+    arabicType: "مجرة حلزونية",
+    status: "Ready",
+    arabicStatus: "جاهز",
+    color: "bg-sky-200",
+  },
+  {
     id: "magnetar",
     name: "Magnetar",
-    arabicName: "النجم النيوتروني المغناطيسي",
+    arabicName: "النجم المغناطيسي",
     type: "Neutron Star",
-    arabicType: "نجم مضغوط",
+    arabicType: "نجم نيوتروني",
     status: "Ready",
     arabicStatus: "جاهز",
     color: "bg-indigo-300",
@@ -129,9 +139,7 @@ function CelestialMenu({
       <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
         <div>
           <p className="text-xs uppercase tracking-[0.28em] text-cyan-200/80">Cosmic</p>
-          <h1 className="mt-1 text-lg font-semibold">
-            {isArabic ? "قائمة المحاكيات" : "Simulators Menu"}
-          </h1>
+          <h1 className="mt-1 text-lg font-semibold">{isArabic ? "قائمة المحاكيات" : "Simulators Menu"}</h1>
         </div>
         <button
           aria-label={isArabic ? "إغلاق القائمة" : "Close menu"}
@@ -151,9 +159,7 @@ function CelestialMenu({
           {languages.map((item) => (
             <button
               className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                language === item
-                  ? "bg-cyan-200 text-slate-950"
-                  : "text-white/70 hover:text-white"
+                language === item ? "bg-cyan-200 text-slate-950" : "text-white/70 hover:text-white"
               }`}
               key={item}
               onClick={() => onLanguageChange(item)}
@@ -174,8 +180,8 @@ function CelestialMenu({
             const isSelected = selectedBody === body.id;
             const title = isArabic ? body.arabicName : body.name;
             const subtitle = isArabic
-              ? `${body.name} · ${body.arabicType}`
-              : `${body.arabicName} · ${body.type}`;
+              ? `${body.name} - ${body.arabicType}`
+              : `${body.arabicName} - ${body.type}`;
 
             return (
               <button
@@ -190,18 +196,14 @@ function CelestialMenu({
                 onClick={() => onSelectBody(body.id)}
                 type="button"
               >
-                <span
-                  className={`h-3 w-3 shrink-0 rounded-full ${body.color} shadow-[0_0_18px_currentColor]`}
-                />
+                <span className={`h-3 w-3 shrink-0 rounded-full ${body.color} shadow-[0_0_18px_currentColor]`} />
                 <span className="min-w-0 flex-1">
                   <span className="block text-sm font-semibold">{title}</span>
                   <span className="block truncate text-xs text-white/50">{subtitle}</span>
                 </span>
                 <span
                   className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wide ${
-                    body.status === "Ready"
-                      ? "bg-cyan-200 text-slate-950"
-                      : "bg-white/10 text-white/55"
+                    body.status === "Ready" ? "bg-cyan-200 text-slate-950" : "bg-white/10 text-white/55"
                   }`}
                 >
                   {isArabic ? body.arabicStatus : body.status}

@@ -159,6 +159,7 @@ function SunSimulatorPage() {
     if (bodyId === "saturn") navigate("/saturn");
     if (bodyId === "neptune") navigate("/neptune");
     if (bodyId === "uranus") navigate("/uranus");
+    if (bodyId === "milky-way") navigate("/milky-way");
     if (bodyId === "sun") setIsMenuOpen(false);
   };
 
@@ -172,7 +173,7 @@ function SunSimulatorPage() {
         showCorona={showCorona}
         showFlares={showFlares}
       />
-      <SimulationSound language={language} tone="orange" videoId="50kwxyFQalI" />
+      <SimulationSound language={language} tone="orange" videoId="aMNi7UX6wOc" />
 
       <button
         aria-label={text.menuLabel}

@@ -47,6 +47,7 @@ function SaturnSimulatorPage() {
     if (bodyId === "saturn") setIsMenuOpen(false);
     if (bodyId === "neptune") navigate("/neptune");
     if (bodyId === "uranus") navigate("/uranus");
+    if (bodyId === "milky-way") navigate("/milky-way");
   };
 
   return (

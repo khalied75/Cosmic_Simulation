@@ -17,7 +17,7 @@ function SimulationSound({ language = "EN", tone = "white", videoId, volume = 30
   const [isPlaying, setIsPlaying] = useState(false);
   const iframeRef = useRef(null);
   const text = labels[language] ?? labels.EN;
-  const origin = typeof window === "undefined" ? "" : window.location.origin;
+  const origin = typeof window === "undefined" ? "" : encodeURIComponent(window.location.origin);
   const safeVolume = Math.max(0, Math.min(100, volume));
   const src = `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${origin}`;
 
@@ -62,8 +62,8 @@ function SimulationSound({ language = "EN", tone = "white", videoId, volume = 30
           aria-hidden="true"
           className="pointer-events-none fixed -left-10 -top-10 h-1 w-1 opacity-0"
           onLoad={() => {
-            setPlayerVolume();
-            window.setTimeout(setPlayerVolume, 900);
+            window.setTimeout(setPlayerVolume, 500);
+            window.setTimeout(setPlayerVolume, 1200);
           }}
           ref={iframeRef}
           src={src}

@@ -102,6 +102,18 @@ const simulators = [
     accent: "amber",
   },
   {
+    id: "milky-way",
+    title: { AR: "محاكاة درب التبانة", EN: "Milky Way Simulator" },
+    subtitle: { AR: "Milky Way", EN: "درب التبانة" },
+    description: {
+      AR: "مجرة حلزونية ثلاثية الأبعاد مع نواة مضيئة، أذرع نجمية متدرجة، سحب غبار، ومجرات قزمة صغيرة حولها لإحساس بصري أقرب للواقع.",
+      EN: "A 3D spiral galaxy with a luminous core, layered stellar arms, dust lanes, and small satellite galaxies for a more realistic look.",
+    },
+    path: "/milky-way",
+    status: "ready",
+    accent: "sky",
+  },
+  {
     id: "black-hole",
     title: { AR: "الثقب الأسود", EN: "Black Hole" },
     subtitle: { AR: "Black Hole", EN: "الثقب الأسود" },

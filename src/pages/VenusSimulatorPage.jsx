@@ -85,6 +85,7 @@ function VenusSimulatorPage() {
     if (bodyId === "saturn") navigate("/saturn");
     if (bodyId === "neptune") navigate("/neptune");
     if (bodyId === "uranus") navigate("/uranus");
+    if (bodyId === "milky-way") navigate("/milky-way");
   };
 
   return (

@@ -79,6 +79,7 @@ function BlackHoleSimulatorPage() {
     if (bodyId === "jupiter") navigate("/jupiter");
     if (bodyId === "saturn") navigate("/saturn");
     if (bodyId === "neptune") navigate("/neptune");
+    if (bodyId === "milky-way") navigate("/milky-way");
     if (bodyId === "black-hole") setIsMenuOpen(false);
   };
 

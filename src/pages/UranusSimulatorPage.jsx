@@ -79,6 +79,7 @@ function UranusSimulatorPage() {
     if (bodyId === "jupiter") navigate("/jupiter");
     if (bodyId === "saturn") navigate("/saturn");
     if (bodyId === "neptune") navigate("/neptune");
+    if (bodyId === "milky-way") navigate("/milky-way");
     if (bodyId === "uranus") setIsMenuOpen(false);
   };
 

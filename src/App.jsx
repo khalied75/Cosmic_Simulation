@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import JupiterSimulatorPage from "./pages/JupiterSimulatorPage";
 import MagnetarSimulatorPage from "./pages/MagnetarSimulatorPage";
 import MarsSimulatorPage from "./pages/MarsSimulatorPage";
+import MilkyWaySimulatorPage from "./pages/MilkyWaySimulatorPage";
 import NeptuneSimulatorPage from "./pages/NeptuneSimulatorPage";
 import SaturnSimulatorPage from "./pages/SaturnSimulatorPage";
 import SunSimulatorPage from "./pages/SunSimulatorPage";
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "/mars",
         element: <MarsSimulatorPage />,
+      },
+      {
+        path: "/milky-way",
+        element: <MilkyWaySimulatorPage />,
       },
       {
         path: "/saturn",
