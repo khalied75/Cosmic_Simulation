@@ -7,12 +7,12 @@ const copy = {
     badge: "Cosmic Simulation",
     heading: "بوابة محاكاة الكون",
     intro:
-      "صفحة رئيسية لاختيار المحاكيات وقراءة نظرة عامة قبل الدخول إلى التجربة. كل محاكي يفتح في صفحة مستقلة حتى تبقى مساحة العرض نظيفة ومركزة.",
+      "اختر أي محاكاة وادخل إلى تجربة مستقلة بتصميم بصري واضح ومركز. كل صفحة مخصصة لمحاكي واحد حتى تبقى التجربة أنظف وأسهل في التفاعل.",
     credit: "إعداد: خالد جمال الزعبي",
     open: "افتح المحاكي",
     unavailable: "غير متاح الآن",
     ready: "جاهز",
-    soon: "قريباً",
+    soon: "قريبًا",
   },
   EN: {
     dir: "ltr",
@@ -34,7 +34,7 @@ const simulators = [
     title: { AR: "محاكاة الشمس", EN: "Sun Simulator" },
     subtitle: { AR: "Sun Simulator", EN: "الشمس" },
     description: {
-      AR: "نجم مركزي تفاعلي مع نسيج شمسي متوهج، بقع شمسية، شواظ متحركة، إكليل ديناميكي، وطبقات يمكن اختيارها.",
+      AR: "نجم مركزي تفاعلي مع نسيج شمسي متوهج، بقع شمسية، شواط متحركة، إكليل ديناميكي، وطبقات يمكن اختيارها.",
       EN: "An interactive central star with a glowing solar texture, sunspots, moving prominences, a dynamic corona, and selectable layers.",
     },
     path: "/sun",
@@ -54,6 +54,18 @@ const simulators = [
     accent: "cyan",
   },
   {
+    id: "atomic-simulation",
+    title: { AR: "محاكاة ذرية", EN: "Atomic Simulation" },
+    subtitle: { AR: "Atomic Simulation", EN: "Atomic Simulation" },
+    description: {
+      AR: "محاكاة ذرية مستقلة لعناصر النجوم الأساسية، مع نموذج بصري تفاعلي للبروتونات والنيوترونات والإلكترونات وصوت مدمج داخل الصفحة.",
+      EN: "A standalone atomic simulator for key stellar elements, with an interactive visual model of protons, neutrons, electrons, and integrated sound.",
+    },
+    path: "/atomic-simulation",
+    status: "ready",
+    accent: "sky",
+  },
+  {
     id: "venus",
     title: { AR: "محاكاة الزهرة", EN: "Venus Simulator" },
     subtitle: { AR: "Venus Simulator", EN: "الزهرة" },
@@ -70,7 +82,7 @@ const simulators = [
     title: { AR: "محاكاة أورانوس", EN: "Uranus Simulator" },
     subtitle: { AR: "Uranus Simulator", EN: "أورانوس" },
     description: {
-      AR: "عملاق فيروزي هادئ مع ميل محوري حاد، حلقات شبه عمودية، غلاف بارد، وأحزمة جوية خفيفة جداً.",
+      AR: "عملاق فيروزي هادئ مع ميل محوري حاد، حلقات شبه عمودية، غلاف بارد، وأحزمة جوية خفيفة جدًا.",
       EN: "A calm turquoise giant with an extreme axial tilt, near-vertical rings, a cold atmosphere, and very subtle atmospheric bands.",
     },
     path: "/uranus",
@@ -106,8 +118,8 @@ const simulators = [
     title: { AR: "محاكاة درب التبانة", EN: "Milky Way Simulator" },
     subtitle: { AR: "Milky Way", EN: "درب التبانة" },
     description: {
-      AR: "مجرة حلزونية ثلاثية الأبعاد مع نواة مضيئة، أذرع نجمية متدرجة، سحب غبار، ومجرات قزمة صغيرة حولها لإحساس بصري أقرب للواقع.",
-      EN: "A 3D spiral galaxy with a luminous core, layered stellar arms, dust lanes, and small satellite galaxies for a more realistic look.",
+      AR: "مجرة حلزونية ثلاثية الأبعاد مع نواة مضيئة، أذرع نجمية متدرجة، وسحب غبار لمشهد أقرب إلى الواقع.",
+      EN: "A 3D spiral galaxy with a luminous core, layered stellar arms, dust lanes, and a more realistic galactic composition.",
     },
     path: "/milky-way",
     status: "ready",
@@ -127,7 +139,7 @@ const simulators = [
   },
   {
     id: "magnetar",
-    title: { AR: "محاكاة النجم النيوتروني المغناطيسي", EN: "Magnetar Simulator" },
+    title: { AR: "محاكاة النجم المغناطيسي", EN: "Magnetar Simulator" },
     subtitle: { AR: "Magnetar Simulator", EN: "النجم المغناطيسي" },
     description: {
       AR: "نجم نيوتروني شديد الكثافة مع مجال مغناطيسي متوهج، نفاثات قطبية، وهالة زرقاء بنفسجية مشحونة بالطاقة.",

@@ -149,26 +149,27 @@ function SunSimulatorPage() {
   const activeLayer = layers.find((layer) => layer.id === selectedLayer) ?? layers[3];
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black text-white"  dir={isArabic ? "rtl" : "ltr"}>
-      <SunScene
-        isPaused={isPaused}
-        key={resetKey}
-        onPausedChange={setIsPaused}
-        selectedLayer={selectedLayer}
-        showCorona={showCorona}
-        showFlares={showFlares}
-      />
-      <SimulationSound language={language} tone="orange" videoId="aMNi7UX6wOc" />
-      <CosmicNavbar menuLabel={text.menuLabel} selectedBody="sun" tone="orange" />
+    <main className="bg-black text-white" dir={isArabic ? "rtl" : "ltr"}>
+      <section className="relative min-h-screen overflow-hidden">
+        <SunScene
+          isPaused={isPaused}
+          key={resetKey}
+          onPausedChange={setIsPaused}
+          selectedLayer={selectedLayer}
+          showCorona={showCorona}
+          showFlares={showFlares}
+        />
+        <SimulationSound language={language} tone="orange" videoId="aMNi7UX6wOc" />
+        <CosmicNavbar menuLabel={text.menuLabel} selectedBody="sun" tone="orange" />
 
-      <header
-        className={`pointer-events-auto fixed top-4 z-20 flex items-start gap-3 ${
-          isArabic ? "left-4 right-20 justify-start" : "left-20 right-4 justify-end"
-        }`}
-      >
-        <div className="hidden rounded-full border border-orange-200/25 bg-black/45 px-6 py-3 text-sm font-bold text-orange-50 shadow-xl shadow-orange-950/25 backdrop-blur-xl md:block">
-          {text.instructions}
-        </div>
+        <header
+          className={`pointer-events-auto fixed top-4 z-20 flex items-start gap-3 ${
+            isArabic ? "left-4 right-20 justify-start" : "left-20 right-4 justify-end"
+          }`}
+        >
+          <div className="hidden rounded-full border border-orange-200/25 bg-black/45 px-6 py-3 text-sm font-bold text-orange-50 shadow-xl shadow-orange-950/25 backdrop-blur-xl md:block">
+            {text.instructions}
+          </div>
         {/* <button
           className="rounded-full border border-orange-200/18 bg-black/48 px-5 py-3 text-sm font-semibold text-white/80 shadow-xl shadow-orange-950/25 backdrop-blur-xl transition hover:bg-orange-200/10"
           onClick={() => setIsPaused((value) => !value)}
@@ -183,7 +184,7 @@ function SunSimulatorPage() {
         >
           {text.reset}
         </button> */}
-      </header>
+        </header>
 
       {/* <section className="pointer-events-none fixed left-1/2 top-5 z-20 -translate-x-1/2 text-center">
         <div className="rounded-full border border-orange-100/35 bg-gradient-to-r from-orange-600/90 via-yellow-300/85 to-orange-600/90 px-8 py-3 shadow-[0_0_42px_rgba(255,146,24,0.55)]">
@@ -218,63 +219,64 @@ function SunSimulatorPage() {
         </section> */}
       {/* </aside> */}
 
-      <aside className={`pointer-events-auto fixed top-24 z-20 hidden w-60 lg:block ${isArabic ? "right-5" : "left-5"}`}>
-        <section className="max-h-[calc(100vh-9rem)] overflow-y-auto rounded-xl border border-orange-200/22 bg-black/50 p-4 shadow-2xl shadow-orange-950/25 backdrop-blur-2xl">
-          <h4 className="text-base font-bold text-orange-200">{text.layersTitle}</h4>
-          <div className="mt-3 space-y-1.5">
-            {layers.map((layer) => (
-              <button
-                className={`flex w-full items-center gap-2.5 rounded-lg border px-2.5 py-2.5 transition ${
-                  isArabic ? "text-right" : "text-left"
-                } ${
-                  selectedLayer === layer.id
-                    ? "border-orange-200/70 bg-orange-200/16 shadow-[0_0_22px_rgba(255,146,24,0.22)]"
-                    : "border-white/10 bg-white/[0.03] hover:border-orange-200/35"
-                }`}
-                key={layer.id}
-                onClick={() => setSelectedLayer(layer.id)}
-                type="button"
-              >
-                <span className={`h-3 w-3 shrink-0 rounded-full ${layer.color} shadow-[0_0_14px_currentColor]`} />
-                <span className="min-w-0">
-                  <span className="block text-[13px] font-bold leading-5">{isArabic ? layer.ar : layer.en}</span>
-                  <span className="block text-[11px] leading-4 text-white/45">{isArabic ? layer.arMeta : layer.enMeta}</span>
-                </span>
-              </button>
-            ))}
-          </div>
-        </section>
-      </aside>
+        <aside className={`pointer-events-auto fixed top-24 z-20 hidden w-60 lg:block ${isArabic ? "right-5" : "left-5"}`}>
+          <section className="max-h-[calc(100vh-9rem)] overflow-y-auto rounded-xl border border-orange-200/22 bg-black/50 p-4 shadow-2xl shadow-orange-950/25 backdrop-blur-2xl">
+            <h4 className="text-base font-bold text-orange-200">{text.layersTitle}</h4>
+            <div className="mt-3 space-y-1.5">
+              {layers.map((layer) => (
+                <button
+                  className={`flex w-full items-center gap-2.5 rounded-lg border px-2.5 py-2.5 transition ${
+                    isArabic ? "text-right" : "text-left"
+                  } ${
+                    selectedLayer === layer.id
+                      ? "border-orange-200/70 bg-orange-200/16 shadow-[0_0_22px_rgba(255,146,24,0.22)]"
+                      : "border-white/10 bg-white/[0.03] hover:border-orange-200/35"
+                  }`}
+                  key={layer.id}
+                  onClick={() => setSelectedLayer(layer.id)}
+                  type="button"
+                >
+                  <span className={`h-3 w-3 shrink-0 rounded-full ${layer.color} shadow-[0_0_14px_currentColor]`} />
+                  <span className="min-w-0">
+                    <span className="block text-[13px] font-bold leading-5">{isArabic ? layer.ar : layer.en}</span>
+                    <span className="block text-[11px] leading-4 text-white/45">{isArabic ? layer.arMeta : layer.enMeta}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </section>
+        </aside>
 
-      <div className="pointer-events-none fixed bottom-5 left-5 right-5 z-20 flex flex-wrap items-end justify-between gap-3">
-        <div className="rounded-full border border-orange-200/16 bg-black/52 px-5 py-3 text-sm text-white/78 shadow-xl shadow-orange-950/25 backdrop-blur-xl">
-          {text.status}{" "}
-          <span className={isPaused ? "text-orange-200" : "text-emerald-200"}>{isPaused ? text.paused : text.live}</span>
+        <div className="pointer-events-none fixed bottom-5 left-5 right-5 z-20 flex flex-wrap items-end justify-between gap-3">
+          <div className="rounded-full border border-orange-200/16 bg-black/52 px-5 py-3 text-sm text-white/78 shadow-xl shadow-orange-950/25 backdrop-blur-xl">
+            {text.status}{" "}
+            <span className={isPaused ? "text-orange-200" : "text-emerald-200"}>{isPaused ? text.paused : text.live}</span>
+          </div>
+          <div className="pointer-events-auto flex flex-wrap justify-end gap-2">
+            <button
+              className="rounded-full border border-orange-200/16 bg-black/52 px-5 py-3 text-sm font-semibold text-white/78 shadow-xl shadow-orange-950/25 backdrop-blur-xl transition hover:bg-orange-200/10"
+              onClick={() => setShowFlares((value) => !value)}
+              type="button"
+            >
+              {showFlares ? text.flares : text.flaresHidden}
+            </button>
+            <button
+              className="rounded-full border border-orange-200/16 bg-black/52 px-5 py-3 text-sm font-semibold text-white/78 shadow-xl shadow-orange-950/25 backdrop-blur-xl transition hover:bg-orange-200/10"
+              onClick={() => setShowCorona((value) => !value)}
+              type="button"
+            >
+              {showCorona ? text.corona : text.coronaHidden}
+            </button>
+            <button
+              className="hidden rounded-full border border-orange-200/16 bg-black/52 px-5 py-3 text-sm font-semibold text-white/78 shadow-xl shadow-orange-950/25 backdrop-blur-xl transition hover:bg-orange-200/10 md:block"
+              onClick={() => navigate("/")}
+              type="button"
+            >
+              {text.choose}
+            </button>
+          </div>
         </div>
-        <div className="pointer-events-auto flex flex-wrap justify-end gap-2">
-          <button
-            className="rounded-full border border-orange-200/16 bg-black/52 px-5 py-3 text-sm font-semibold text-white/78 shadow-xl shadow-orange-950/25 backdrop-blur-xl transition hover:bg-orange-200/10"
-            onClick={() => setShowFlares((value) => !value)}
-            type="button"
-          >
-            {showFlares ? text.flares : text.flaresHidden}
-          </button>
-          <button
-            className="rounded-full border border-orange-200/16 bg-black/52 px-5 py-3 text-sm font-semibold text-white/78 shadow-xl shadow-orange-950/25 backdrop-blur-xl transition hover:bg-orange-200/10"
-            onClick={() => setShowCorona((value) => !value)}
-            type="button"
-          >
-            {showCorona ? text.corona : text.coronaHidden}
-          </button>
-          <button
-            className="hidden rounded-full border border-orange-200/16 bg-black/52 px-5 py-3 text-sm font-semibold text-white/78 shadow-xl shadow-orange-950/25 backdrop-blur-xl transition hover:bg-orange-200/10 md:block"
-            onClick={() => navigate("/")}
-            type="button"
-          >
-            {text.choose}
-          </button>
-        </div>
-      </div>
+      </section>
     </main>
   );
 }

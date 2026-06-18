@@ -6,6 +6,7 @@ import CelestialMenu from "./CelestialMenu";
 const routes = {
   sun: "/sun",
   earth: "/earth",
+  "atomic-simulation": "/atomic-simulation",
   venus: "/venus",
   uranus: "/uranus",
   mars: "/mars",

@@ -22,6 +22,16 @@ const bodies = [
     color: "bg-cyan-200",
   },
   {
+    id: "atomic-simulation",
+    name: "Atomic Simulation",
+    arabicName: "محاكاة ذرية",
+    type: "Atom Model",
+    arabicType: "نموذج ذري",
+    status: "Ready",
+    arabicStatus: "جاهز",
+    color: "bg-sky-300",
+  },
+  {
     id: "venus",
     name: "Venus",
     arabicName: "الزهرة",

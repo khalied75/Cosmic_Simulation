@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./Layout";
+import AtomicSimulationPage from "./pages/AtomicSimulationPage";
 import BlackHoleSimulatorPage from "./pages/BlackHoleSimulatorPage";
 import EarthSimulatorPage from "./pages/EarthSimulatorPage";
 import HomePage from "./pages/HomePage";
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/earth",
         element: <EarthSimulatorPage />,
+      },
+      {
+        path: "/atomic-simulation",
+        element: <AtomicSimulationPage />,
       },
       {
         path: "/black-hole",
