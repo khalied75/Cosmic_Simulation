@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CelestialMenu from "../components/CelestialMenu";
+import CosmicNavbar from "../components/CosmicNavbar";
 import MilkyWayScene from "../components/MilkyWayScene";
 import SimulationSound from "../components/SimulationSound";
+import { useLanguage } from "../context/LanguageContext";
 
 const copy = {
   AR: {
@@ -36,36 +37,12 @@ const copy = {
 };
 
 function MilkyWaySimulatorPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("EN");
   const [isPaused, setIsPaused] = useState(false);
   const [showDust, setShowDust] = useState(true);
   const [showHalo, setShowHalo] = useState(true);
   const navigate = useNavigate();
-  const isArabic = language === "AR";
+  const { language, isArabic } = useLanguage();
   const text = copy[language];
-
-  const handleSelectBody = (bodyId) => {
-    if (bodyId === "milky-way") {
-      setIsMenuOpen(false);
-      return;
-    }
-
-    const routes = {
-      sun: "/sun",
-      earth: "/earth",
-      magnetar: "/magnetar",
-      venus: "/venus",
-      uranus: "/uranus",
-      mars: "/mars",
-      jupiter: "/jupiter",
-      saturn: "/saturn",
-      neptune: "/neptune",
-      "black-hole": "/black-hole",
-    };
-
-    if (routes[bodyId]) navigate(routes[bodyId]);
-  };
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#02030a] text-white" dir={isArabic ? "rtl" : "ltr"}>
@@ -77,25 +54,7 @@ function MilkyWaySimulatorPage() {
       />
       <SimulationSound language={language} tone="sky" videoId="3N9RnmwIWbA" volume={42} />
 
-      <button
-        aria-label={text.menuLabel}
-        className={`fixed top-4 z-40 grid h-11 w-11 place-items-center rounded-full border border-sky-200/18 bg-black/45 text-xl text-white shadow-xl shadow-black/35 backdrop-blur-xl transition hover:bg-white/10 ${
-          isArabic ? "right-4" : "left-4"
-        } ${isMenuOpen ? "pointer-events-none scale-90 opacity-0" : "opacity-100"}`}
-        onClick={() => setIsMenuOpen(true)}
-        type="button"
-      >
-        =
-      </button>
-
-      <CelestialMenu
-        isOpen={isMenuOpen}
-        language={language}
-        onClose={() => setIsMenuOpen(false)}
-        onLanguageChange={setLanguage}
-        onSelectBody={handleSelectBody}
-        selectedBody="milky-way"
-      />
+      <CosmicNavbar menuLabel={text.menuLabel} selectedBody="milky-way" tone="sky" />
 
       <header
         className={`pointer-events-auto fixed top-4 z-20 flex items-center ${

@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
 const copy = {
   AR: {
@@ -219,7 +219,7 @@ function getAccentClasses(accent) {
 }
 
 function HomePage() {
-  const [language, setLanguage] = useState("EN");
+  const { language, setLanguage } = useLanguage();
   const text = copy[language];
 
   return (

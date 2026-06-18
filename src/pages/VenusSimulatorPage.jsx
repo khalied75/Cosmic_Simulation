@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CelestialMenu from "../components/CelestialMenu";
+import CosmicNavbar from "../components/CosmicNavbar";
 import SimulationSound from "../components/SimulationSound";
 import VenusScene from "../components/VenusScene";
+import { useLanguage } from "../context/LanguageContext";
 
 const copy = {
   AR: {
@@ -64,29 +65,13 @@ const copy = {
 };
 
 function VenusSimulatorPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("EN");
   const [isPaused, setIsPaused] = useState(false);
   const [showAtmosphere, setShowAtmosphere] = useState(true);
   const [showClouds, setShowClouds] = useState(false);
   const [showSurface, setShowSurface] = useState(true);
   const navigate = useNavigate();
-  const isArabic = language === "AR";
+  const { language, isArabic } = useLanguage();
   const text = copy[language];
-
-  const handleSelectBody = (bodyId) => {
-    if (bodyId === "sun") navigate("/sun");
-    if (bodyId === "earth") navigate("/earth");
-    if (bodyId === "black-hole") navigate("/black-hole");
-    if (bodyId === "magnetar") navigate("/magnetar");
-    if (bodyId === "venus") setIsMenuOpen(false);
-    if (bodyId === "mars") navigate("/mars");
-    if (bodyId === "jupiter") navigate("/jupiter");
-    if (bodyId === "saturn") navigate("/saturn");
-    if (bodyId === "neptune") navigate("/neptune");
-    if (bodyId === "uranus") navigate("/uranus");
-    if (bodyId === "milky-way") navigate("/milky-way");
-  };
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#050201] text-white" dir={isArabic ? "rtl" : "ltr"}>
@@ -98,26 +83,7 @@ function VenusSimulatorPage() {
         showSurface={showSurface}
       />
       <SimulationSound language={language} tone="yellow" videoId="OM8CY9ugJKI" />
-
-      <button
-        aria-label={text.menuLabel}
-        className={`fixed top-4 z-40 grid h-11 w-11 place-items-center rounded-full border border-yellow-200/18 bg-black/45 text-xl text-white shadow-xl shadow-black/35 backdrop-blur-xl transition hover:bg-white/10 ${
-          isArabic ? "right-4" : "left-4"
-        } ${isMenuOpen ? "pointer-events-none scale-90 opacity-0" : "opacity-100"}`}
-        onClick={() => setIsMenuOpen(true)}
-        type="button"
-      >
-        =
-      </button>
-
-      <CelestialMenu
-        isOpen={isMenuOpen}
-        language={language}
-        onClose={() => setIsMenuOpen(false)}
-        onLanguageChange={setLanguage}
-        onSelectBody={handleSelectBody}
-        selectedBody="venus"
-      />
+      <CosmicNavbar menuLabel={text.menuLabel} selectedBody="venus" tone="yellow" />
 
       <header
         className={`pointer-events-auto fixed top-4 z-20 flex items-center ${

@@ -1,3 +1,5 @@
+import { useLanguage } from "../context/LanguageContext";
+
 const bodies = [
   {
     id: "sun",
@@ -113,15 +115,8 @@ const bodies = [
 
 const languages = ["AR", "EN"];
 
-function CelestialMenu({
-  selectedBody,
-  onSelectBody,
-  language,
-  onLanguageChange,
-  isOpen,
-  onClose,
-}) {
-  const isArabic = language === "AR";
+function CelestialMenu({ selectedBody, onSelectBody, isOpen, onClose }) {
+  const { language, setLanguage, isArabic } = useLanguage();
 
   return (
     <aside
@@ -162,7 +157,7 @@ function CelestialMenu({
                 language === item ? "bg-cyan-200 text-slate-950" : "text-white/70 hover:text-white"
               }`}
               key={item}
-              onClick={() => onLanguageChange(item)}
+              onClick={() => setLanguage(item)}
               type="button"
             >
               {item}
