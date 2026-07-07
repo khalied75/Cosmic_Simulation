@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 function createStarTexture() {
   const canvas = document.createElement("canvas");
@@ -195,6 +197,7 @@ function createBurstParticles() {
 
 function MagnetarScene({ isPaused, onPausedChange, showFields = true, showJets = true, showBurst = true }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("magnetar");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -226,6 +229,10 @@ function MagnetarScene({ isPaused, onPausedChange, showFields = true, showJets =
 
     const stars = createStars();
     scene.add(stars);
+
+    const fabric = createSpacetimeFabric(fabricPresets.magnetar);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
 
     scene.add(new THREE.AmbientLight(0x243458, 0.5));
     const coldLight = new THREE.PointLight(0x86d9ff, 7.5, 90, 1.5);
@@ -374,6 +381,7 @@ function MagnetarScene({ isPaused, onPausedChange, showFields = true, showJets =
       window.removeEventListener("resize", resize);
       renderer.domElement.removeEventListener("dblclick", handleDoubleClick);
       controls.dispose();
+      fabric.dispose();
       stars.geometry.dispose();
       stars.material.map?.dispose();
       stars.material.dispose();
@@ -396,7 +404,7 @@ function MagnetarScene({ isPaused, onPausedChange, showFields = true, showJets =
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [isPaused, onPausedChange, showFields, showJets, showBurst]);
+  }, [isPaused, onPausedChange, showFields, showJets, showBurst, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

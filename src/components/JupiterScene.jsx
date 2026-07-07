@@ -3,6 +3,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
 import jupiterMoons from "../data/jupiterMoons";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 function createJupiterTexture() {
   const canvas = document.createElement("canvas");
@@ -127,6 +129,7 @@ function createStars() {
 
 function JupiterScene({ isPaused, onPausedChange }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("jupiter");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -160,6 +163,9 @@ function JupiterScene({ isPaused, onPausedChange }) {
     controls.target.set(0, 0, 0);
 
     scene.add(createStars());
+    const fabric = createSpacetimeFabric(fabricPresets.jupiter);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
     scene.add(new THREE.AmbientLight(0x0a0a20, 0.65));
     const sun = new THREE.DirectionalLight(0xfff5e8, 3.5);
     sun.position.set(12, 5, 10);
@@ -264,13 +270,14 @@ function JupiterScene({ isPaused, onPausedChange }) {
       window.removeEventListener("resize", resize);
       renderer.domElement.removeEventListener("dblclick", handleDoubleClick);
       controls.dispose();
+      fabric.dispose();
       jupiterTexture.dispose();
       moonTextures.forEach((texture) => texture.dispose());
       renderer.dispose();
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [isPaused, onPausedChange]);
+  }, [isPaused, onPausedChange, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

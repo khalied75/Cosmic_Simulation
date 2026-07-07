@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 function createStars() {
   const count = 7200;
@@ -186,6 +188,7 @@ function createAtmosphereMaterial() {
 
 function NeptuneScene({ isPaused, onPausedChange, showAtmosphere = true, showRings = true }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("neptune");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -218,6 +221,9 @@ function NeptuneScene({ isPaused, onPausedChange, showAtmosphere = true, showRin
     controls.enablePan = false;
 
     scene.add(createStars());
+    const fabric = createSpacetimeFabric(fabricPresets.neptune);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
     scene.add(new THREE.AmbientLight(0x081433, 0.9));
     const sun = new THREE.DirectionalLight(0xe8f4ff, 3.8);
     sun.position.set(9, 4, 8);
@@ -308,13 +314,14 @@ function NeptuneScene({ isPaused, onPausedChange, showAtmosphere = true, showRin
       window.removeEventListener("resize", resize);
       renderer.domElement.removeEventListener("dblclick", handleDoubleClick);
       controls.dispose();
+      fabric.dispose();
       neptuneTexture.dispose();
       ringTexture.dispose();
       renderer.dispose();
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [isPaused, onPausedChange, showAtmosphere, showRings]);
+  }, [isPaused, onPausedChange, showAtmosphere, showRings, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

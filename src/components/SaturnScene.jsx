@@ -3,6 +3,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
 import saturnMoons from "../data/saturnMoons";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 function createSaturnTexture() {
   const canvas = document.createElement("canvas");
@@ -142,6 +144,7 @@ function createStars() {
 
 function SaturnScene({ isPaused, onPausedChange, showRings = true }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("saturn");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -175,6 +178,9 @@ function SaturnScene({ isPaused, onPausedChange, showRings = true }) {
     controls.target.set(0, 0, 0);
 
     scene.add(createStars());
+    const fabric = createSpacetimeFabric(fabricPresets.saturn);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
     scene.add(new THREE.AmbientLight(0x0a0a20, 0.5));
     const sun = new THREE.DirectionalLight(0xfff8f0, 3.0);
     sun.position.set(10, 4, 12);
@@ -292,6 +298,7 @@ function SaturnScene({ isPaused, onPausedChange, showRings = true }) {
       window.removeEventListener("resize", resize);
       renderer.domElement.removeEventListener("dblclick", handleDoubleClick);
       controls.dispose();
+      fabric.dispose();
       saturnTexture.dispose();
       ringTexture.dispose();
       moonTextures.forEach((texture) => texture.dispose());
@@ -299,7 +306,7 @@ function SaturnScene({ isPaused, onPausedChange, showRings = true }) {
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [isPaused, onPausedChange, showRings]);
+  }, [isPaused, onPausedChange, showRings, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

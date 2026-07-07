@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import CelestialMenu from "./CelestialMenu";
+import SpacetimeFabricToggle from "./SpacetimeFabricToggle";
 
 const routes = {
   sun: "/sun",
@@ -64,6 +65,8 @@ function CosmicNavbar({ selectedBody, menuLabel, tone = "default" }) {
         onSelectBody={handleSelectBody}
         selectedBody={selectedBody}
       />
+
+      {selectedBody !== "atomic-simulation" && <SpacetimeFabricToggle bodyId={selectedBody} tone={tone} />}
     </>
   );
 }

@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 function createStars() {
   const count = 8000;
@@ -271,6 +273,7 @@ const layerStyles = {
 
 function SunScene({ isPaused, onPausedChange, showCorona = true, showFlares = true, selectedLayer = "photosphere" }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("sun");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -304,6 +307,9 @@ function SunScene({ isPaused, onPausedChange, showCorona = true, showFlares = tr
     controls.target.set(0, 0, 0);
 
     scene.add(createStars());
+    const fabric = createSpacetimeFabric(fabricPresets.sun);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
     scene.add(new THREE.AmbientLight(0xff7a18, 1.15));
     const pointLight = new THREE.PointLight(0xffb22d, 38, 95, 1.6);
     scene.add(pointLight);
@@ -417,12 +423,13 @@ function SunScene({ isPaused, onPausedChange, showCorona = true, showFlares = tr
       window.removeEventListener("resize", resize);
       renderer.domElement.removeEventListener("dblclick", handleDoubleClick);
       controls.dispose();
+      fabric.dispose();
       solarTexture.dispose();
       renderer.dispose();
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [isPaused, onPausedChange, selectedLayer, showCorona, showFlares]);
+  }, [isPaused, onPausedChange, selectedLayer, showCorona, showFlares, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

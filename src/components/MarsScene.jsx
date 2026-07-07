@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 function createStars() {
   const count = 6500;
@@ -290,6 +292,7 @@ function createDustShell() {
 
 function MarsScene({ isPaused, onPausedChange, showAtmosphere = true, showMoons = true, showDust = true }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("mars");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -323,6 +326,9 @@ function MarsScene({ isPaused, onPausedChange, showAtmosphere = true, showMoons 
     controls.target.set(0, 0, 0);
 
     scene.add(createStars());
+    const fabric = createSpacetimeFabric(fabricPresets.mars);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
     scene.add(new THREE.AmbientLight(0x2b160d, 1.2));
     const sunLight = new THREE.DirectionalLight(0xfff2dd, 4.2);
     sunLight.position.set(10, 4, 8);
@@ -464,6 +470,7 @@ function MarsScene({ isPaused, onPausedChange, showAtmosphere = true, showMoons 
       window.removeEventListener("resize", resize);
       renderer.domElement.removeEventListener("dblclick", handleDoubleClick);
       controls.dispose();
+      fabric.dispose();
       marsTexture.dispose();
       bumpTexture.dispose();
       moonTextures.forEach((texture) => texture.dispose());
@@ -471,7 +478,7 @@ function MarsScene({ isPaused, onPausedChange, showAtmosphere = true, showMoons 
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [isPaused, onPausedChange, showAtmosphere, showDust, showMoons]);
+  }, [isPaused, onPausedChange, showAtmosphere, showDust, showMoons, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

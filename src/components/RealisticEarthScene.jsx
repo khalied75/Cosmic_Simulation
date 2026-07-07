@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 const EARTH_MAP = "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg";
 const EARTH_BUMP = "https://threejs.org/examples/textures/planets/earth_normal_2048.jpg";
@@ -105,6 +107,7 @@ function createMoonTexture() {
 
 function RealisticEarthScene({ onAutoRotateChange }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("earth");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -140,6 +143,10 @@ function RealisticEarthScene({ onAutoRotateChange }) {
     controls.enablePan = false;
     controls.target.set(0, 0, 0);
     controls.update();
+
+    const fabric = createSpacetimeFabric(fabricPresets.earth);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
 
     const stars = createStars(2600, 95, 120, 0xf4f7ff, 0.32, 0.95);
     const closeStars = createStars(850, 75, 90, 0xffffff, 0.2, 0.86);
@@ -280,6 +287,7 @@ function RealisticEarthScene({ onAutoRotateChange }) {
       window.removeEventListener("resize", resize);
       renderer.domElement.removeEventListener("dblclick", handleDoubleClick);
       controls.dispose();
+      fabric.dispose();
       earthTexture.dispose();
       bumpTexture.dispose();
       cloudTexture.dispose();
@@ -304,7 +312,7 @@ function RealisticEarthScene({ onAutoRotateChange }) {
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [onAutoRotateChange]);
+  }, [onAutoRotateChange, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

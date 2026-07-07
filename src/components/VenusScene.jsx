@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 function createStars() {
   const count = 6200;
@@ -283,6 +285,7 @@ function createAtmosphereMaterial() {
 
 function VenusScene({ isPaused, onPausedChange, showAtmosphere = true, showClouds = true, showSurface = true }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("venus");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -316,6 +319,9 @@ function VenusScene({ isPaused, onPausedChange, showAtmosphere = true, showCloud
 
     scene.add(createStars());
     scene.add(new THREE.AmbientLight(0x2a1708, 1.15));
+    const fabric = createSpacetimeFabric(fabricPresets.venus);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
     const sun = new THREE.DirectionalLight(0xfff0ce, 4.3);
     sun.position.set(9, 4, 8);
     scene.add(sun);
@@ -402,6 +408,7 @@ function VenusScene({ isPaused, onPausedChange, showAtmosphere = true, showCloud
       window.removeEventListener("resize", resize);
       renderer.domElement.removeEventListener("dblclick", handleDoubleClick);
       controls.dispose();
+      fabric.dispose();
       surfaceTexture.dispose();
       cloudTexture.dispose();
       bumpTexture.dispose();
@@ -409,7 +416,7 @@ function VenusScene({ isPaused, onPausedChange, showAtmosphere = true, showCloud
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [isPaused, onPausedChange, showAtmosphere, showClouds, showSurface]);
+  }, [isPaused, onPausedChange, showAtmosphere, showClouds, showSurface, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

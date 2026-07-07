@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 function createGlowTexture() {
   const canvas = document.createElement("canvas");
@@ -193,6 +195,7 @@ function createPlanet({ radius, position, ring = false, textureStops, textureDet
 
 function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStars = true }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("black-hole");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -232,6 +235,10 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
 
     const stars = createStars();
     scene.add(stars);
+
+    const fabric = createSpacetimeFabric(fabricPresets["black-hole"]);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
 
     const accretionTexture = createAccretionTexture();
     const glowTexture = createGlowTexture();
@@ -529,6 +536,7 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
       stars.geometry.dispose();
       stars.material.map?.dispose();
       stars.material.dispose();
+      fabric.dispose();
       accretionTexture.dispose();
       glowTexture.dispose();
       eventHorizon.geometry.dispose();
@@ -559,7 +567,7 @@ function BlackHoleScene({ isPaused, onPausedChange, showPlanets = true, showStar
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [isPaused, onPausedChange, showPlanets, showStars]);
+  }, [isPaused, onPausedChange, showPlanets, showStars, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

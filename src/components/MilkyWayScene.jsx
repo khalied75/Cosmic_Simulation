@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 function starColor(t) {
   const colors = [
@@ -328,6 +330,7 @@ function buildGlow(scene, glowStrength) {
 
 function MilkyWayScene({ isPaused, onPausedChange, showDust = true, showHalo = true }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("milky-way");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -359,6 +362,10 @@ function MilkyWayScene({ isPaused, onPausedChange, showDust = true, showHalo = t
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.5;
     controls.target.set(0, 0, 0);
+
+    const fabric = createSpacetimeFabric(fabricPresets["milky-way"]);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
 
     const params = {
       rotSpeed: 0.3,
@@ -440,6 +447,7 @@ function MilkyWayScene({ isPaused, onPausedChange, showDust = true, showHalo = t
       window.removeEventListener("resize", resize);
       renderer.domElement.removeEventListener("dblclick", handleDoubleClick);
       controls.dispose();
+      fabric.dispose();
 
       galaxyPoints.geometry.dispose();
       galaxyPoints.material.dispose();
@@ -461,7 +469,7 @@ function MilkyWayScene({ isPaused, onPausedChange, showDust = true, showHalo = t
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [isPaused, onPausedChange, showDust, showHalo]);
+  }, [isPaused, onPausedChange, showDust, showHalo, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }

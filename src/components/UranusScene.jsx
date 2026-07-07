@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { lockSceneInteraction } from "./sceneInteractionLock";
+import { createSpacetimeFabric, fabricPresets } from "./spacetimeFabric3d";
+import { useSpacetimeFabric } from "./spacetimeFabricState";
 
 function createStars() {
   const count = 6800;
@@ -170,6 +172,7 @@ function createAtmosphereMaterial() {
 
 function UranusScene({ isPaused, onPausedChange, showAtmosphere = true, showRings = true }) {
   const containerRef = useRef(null);
+  const showSpacetimeFabric = useSpacetimeFabric("uranus");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -202,6 +205,9 @@ function UranusScene({ isPaused, onPausedChange, showAtmosphere = true, showRing
     controls.enablePan = false;
 
     scene.add(createStars());
+    const fabric = createSpacetimeFabric(fabricPresets.uranus);
+    fabric.group.visible = showSpacetimeFabric;
+    scene.add(fabric.group);
     scene.add(new THREE.AmbientLight(0x10282f, 0.92));
     const sun = new THREE.DirectionalLight(0xe7ffff, 3.4);
     sun.position.set(8, 4, 8);
@@ -293,13 +299,14 @@ function UranusScene({ isPaused, onPausedChange, showAtmosphere = true, showRing
       window.removeEventListener("resize", resize);
       renderer.domElement.removeEventListener("dblclick", handleDoubleClick);
       controls.dispose();
+      fabric.dispose();
       uranusTexture.dispose();
       ringTexture.dispose();
       renderer.dispose();
       releaseInteractionLock();
       renderer.domElement.remove();
     };
-  }, [isPaused, onPausedChange, showAtmosphere, showRings]);
+  }, [isPaused, onPausedChange, showAtmosphere, showRings, showSpacetimeFabric]);
 
   return <div className="absolute inset-0" ref={containerRef} />;
 }
