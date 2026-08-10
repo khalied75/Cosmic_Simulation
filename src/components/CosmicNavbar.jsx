@@ -17,6 +17,7 @@ const routes = {
   magnetar: "/magnetar",
   "black-hole": "/black-hole",
   "milky-way": "/milky-way",
+  "bubble-universe": "/bubble-universe",
 };
 
 function CosmicNavbar({ selectedBody, menuLabel, tone = "default" }) {
@@ -31,6 +32,7 @@ function CosmicNavbar({ selectedBody, menuLabel, tone = "default" }) {
       indigo: "border-indigo-200/18",
       orange: "border-orange-200/18",
       sky: "border-sky-200/18",
+      violet: "border-violet-200/18",
       white: "border-white/15",
       yellow: "border-yellow-200/18",
     }[tone] ?? "border-white/15";
@@ -66,7 +68,9 @@ function CosmicNavbar({ selectedBody, menuLabel, tone = "default" }) {
         selectedBody={selectedBody}
       />
 
-      {selectedBody !== "atomic-simulation" && <SpacetimeFabricToggle bodyId={selectedBody} tone={tone} />}
+      {!(["atomic-simulation", "bubble-universe"].includes(selectedBody)) && (
+        <SpacetimeFabricToggle bodyId={selectedBody} tone={tone} />
+      )}
     </>
   );
 }

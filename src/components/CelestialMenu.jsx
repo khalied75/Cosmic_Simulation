@@ -82,6 +82,16 @@ const bodies = [
     color: "bg-sky-200",
   },
   {
+    id: "bubble-universe",
+    name: "Cosmic Bubbles",
+    arabicName: "الفقاعات الكونية",
+    type: "Cosmology",
+    arabicType: "علم الكونيات",
+    status: "Ready",
+    arabicStatus: "جاهز",
+    color: "bg-fuchsia-300",
+  },
+  {
     id: "magnetar",
     name: "Magnetar",
     arabicName: "النجم المغناطيسي",

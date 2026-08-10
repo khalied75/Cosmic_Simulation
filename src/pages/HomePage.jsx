@@ -126,6 +126,18 @@ const simulators = [
     accent: "sky",
   },
   {
+    id: "bubble-universe",
+    title: { AR: "محاكاة الفقاعات الكونية", EN: "Cosmic Bubble Simulator" },
+    subtitle: { AR: "Cosmic Bubbles", EN: "الفقاعات الكونية" },
+    description: {
+      AR: "رحلة ثلاثية الأبعاد بين فقاعات كونية واقعية بأغشية زجاجية وسحب نجمية متحركة، مع إمكانية اختيار أي فقاعة والانتقال إليها.",
+      EN: "A 3D journey through realistic cosmic bubbles with glass-like membranes and moving stellar clouds, with seamless travel to any selected bubble.",
+    },
+    path: "/bubble-universe",
+    status: "ready",
+    accent: "violet",
+  },
+  {
     id: "black-hole",
     title: { AR: "الثقب الأسود", EN: "Black Hole" },
     subtitle: { AR: "Black Hole", EN: "الثقب الأسود" },

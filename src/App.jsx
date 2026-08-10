@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./Layout";
 import AtomicSimulationPage from "./pages/AtomicSimulationPage";
 import BlackHoleSimulatorPage from "./pages/BlackHoleSimulatorPage";
+import BubbleUniverseSimulatorPage from "./pages/BubbleUniverseSimulatorPage";
 import EarthSimulatorPage from "./pages/EarthSimulatorPage";
 import HomePage from "./pages/HomePage";
 import JupiterSimulatorPage from "./pages/JupiterSimulatorPage";
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/black-hole",
         element: <BlackHoleSimulatorPage />,
+      },
+      {
+        path: "/bubble-universe",
+        element: <BubbleUniverseSimulatorPage />,
       },
       {
         path: "/magnetar",
