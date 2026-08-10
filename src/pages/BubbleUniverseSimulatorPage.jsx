@@ -7,7 +7,7 @@ import { useLanguage } from "../context/LanguageContext";
 const copy = {
   AR: {
     menuLabel: "فتح القائمة",
-    instructions: "اسحب للدوران · مرّر أو قرّب للتكبير · اضغط على فقاعة للانتقال إليها",
+    instructions: "اسحب للدوران · مرّر أو قرّب للتكبير · اضغط على فقاعة أو الثقب الأسود للانتقال إليه",
     status: "محاكاة الفقاعات الكونية ·",
     live: "نشطة",
     paused: "متوقفة",
@@ -18,7 +18,7 @@ const copy = {
   },
   EN: {
     menuLabel: "Open menu",
-    instructions: "Drag to orbit · Scroll or pinch to zoom · Select a bubble to travel to it",
+    instructions: "Drag to orbit · Scroll or pinch to zoom · Select a bubble or the black hole to travel to it",
     status: "Cosmic Bubble Simulation ·",
     live: "Live",
     paused: "Paused",
