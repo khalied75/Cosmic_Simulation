@@ -12,7 +12,7 @@ const labels = {
   },
 };
 
-function SpacetimeFabricToggle({ bodyId, tone = "white" }) {
+function SpacetimeFabricToggle({ bodyId, tone = "white", inline = false }) {
   const { language } = useLanguage();
   const isOpen = useSpacetimeFabric(bodyId);
   const text = labels[language] ?? labels.EN;
@@ -31,7 +31,7 @@ function SpacetimeFabricToggle({ bodyId, tone = "white" }) {
   return (
     <button
       aria-pressed={isOpen}
-      className={`pointer-events-auto fixed bottom-36 left-1/2 z-30 -translate-x-1/2 rounded-full border bg-black/52 px-4 py-2 text-sm font-semibold text-white/82 shadow-xl shadow-black/25 backdrop-blur-xl transition md:bottom-20 md:left-5 md:translate-x-0 ${toneClass}`}
+      className={`pointer-events-auto ${inline ? "min-h-11 w-full" : "fixed bottom-36 left-1/2 z-30 -translate-x-1/2 md:bottom-20 md:left-5 md:translate-x-0"} rounded-full border bg-black/52 px-4 py-2 text-sm font-semibold text-white/82 shadow-xl shadow-black/25 backdrop-blur-xl transition ${toneClass}`}
       onClick={() => toggleSpacetimeFabric(bodyId)}
       type="button"
     >

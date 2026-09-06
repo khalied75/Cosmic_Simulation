@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import JupiterSimulatorPage from "./pages/JupiterSimulatorPage";
 import MagnetarSimulatorPage from "./pages/MagnetarSimulatorPage";
 import NeutronBinarySimulatorPage from "./pages/NeutronBinarySimulatorPage";
+import BlackHoleBinarySimulatorPage from "./pages/BlackHoleBinarySimulatorPage";
 import MarsSimulatorPage from "./pages/MarsSimulatorPage";
 import MilkyWaySimulatorPage from "./pages/MilkyWaySimulatorPage";
 import NeptuneSimulatorPage from "./pages/NeptuneSimulatorPage";
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
+      { path: "/black-hole-binary", element: <BlackHoleBinarySimulatorPage /> },
       { path: "/neutron-binary", element: <NeutronBinarySimulatorPage /> },
       {
         path: "/",

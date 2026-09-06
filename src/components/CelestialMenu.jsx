@@ -2,6 +2,11 @@ import { useLanguage } from "../context/LanguageContext";
 
 const bodies = [
   {
+    id: "black-hole-binary", name: "Black Hole Binary", arabicName: "ثنائي ثقوب سوداء",
+    type: "Black Hole Merger", arabicType: "اندماج ثقبين أسودين",
+    status: "Ready", arabicStatus: "جاهز", color: "bg-amber-300",
+  },
+  {
     id: "neutron-binary", name: "Neutron Binary", arabicName: "ثنائي نيتروني",
     type: "Neutron Star Merger", arabicType: "اندماج نجمين نيوترونيين",
     status: "Ready", arabicStatus: "جاهز", color: "bg-violet-300",

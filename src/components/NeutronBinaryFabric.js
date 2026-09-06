@@ -1,13 +1,13 @@
 import * as THREE from "three";
 
-export function createNeutronBinaryFabric() {
+export function createNeutronBinaryFabric(blackHoles = false) {
   const geometry = new THREE.PlaneGeometry(48, 48, 240, 240);
   geometry.rotateX(-Math.PI / 2);
-  const uniforms = { time: { value: 0 }, star: { value: new THREE.Vector2() }, merged: { value: 0 } };
+  const uniforms = { time: { value: 0 }, star: { value: new THREE.Vector2() }, merged: { value: 0 }, depth: { value: blackHoles ? 1.5 : 1 } };
   const material = new THREE.ShaderMaterial({
     uniforms, transparent: true, side: THREE.DoubleSide, depthWrite: false,
     vertexShader: `
-      uniform float time; uniform vec2 star; uniform float merged;
+      uniform float time; uniform vec2 star; uniform float merged; uniform float depth;
       varying vec2 coord; varying float wave; varying float height;
       float phaseAt(float t) {
         float rate = (pow(3.4,4.)-pow(.62,4.))/42.;
@@ -26,7 +26,7 @@ export function createNeutronBinaryFabric() {
         float well=-1.35/sqrt(dot(coord-star,coord-star)+.65)
                    -1.35/sqrt(dot(coord+star,coord+star)+.65);
         float single=-2.7/sqrt(dot(coord,coord)+1.);
-        height=mix(well,single,merged)+wave*amplitude;
+        height=mix(well,single,merged)*depth+wave*amplitude;
         vec3 pos=position; pos.y=height-1.25;
         gl_Position=projectionMatrix*modelViewMatrix*vec4(pos,1.);
       }`,

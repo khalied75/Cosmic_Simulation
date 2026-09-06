@@ -21,11 +21,11 @@ function glowTexture() {
   return new THREE.CanvasTexture(canvas);
 }
 
-export default function NeutronBinaryScene({ isPaused, onPausedChange, restart, speed, onStageChange }) {
+export default function NeutronBinaryScene({ blackHoles = false, isPaused, onPausedChange, restart, speed, onStageChange }) {
   const host = useRef(null);
   const current = useRef({});
   const [failed, setFailed] = useState(false);
-  const showFabric = useSpacetimeFabric("neutron-binary");
+  const showFabric = useSpacetimeFabric(blackHoles ? "black-hole-binary" : "neutron-binary");
   useEffect(() => { current.current = { isPaused, onPausedChange, restart, speed, onStageChange, showFabric }; }, [isPaused, onPausedChange, restart, speed, onStageChange, showFabric]);
 
   useEffect(() => {
@@ -47,6 +47,10 @@ export default function NeutronBinaryScene({ isPaused, onPausedChange, restart, 
     controls.maxPolarAngle = Math.PI * .49;
     controls.target.set(0, -1, 0);
     const unlock = lockSceneInteraction(container, renderer.domElement);
+    // Keep native scrolling available on the control panel outside the canvas.
+    const previousTouchAction = [document.documentElement.style.touchAction, document.body.style.touchAction];
+    document.documentElement.style.touchAction = "auto";
+    document.body.style.touchAction = "auto";
     const texture = glowTexture();
     const backgroundGeometry = new THREE.BufferGeometry();
     const backgroundPositions = new Float32Array(4200 * 3);
@@ -60,7 +64,7 @@ export default function NeutronBinaryScene({ isPaused, onPausedChange, restart, 
     }
     backgroundGeometry.setAttribute("position", new THREE.BufferAttribute(backgroundPositions, 3));
     scene.add(new THREE.Points(backgroundGeometry, new THREE.PointsMaterial({ color: 0xbfcfff, size: .24, map: texture, transparent: true, depthWrite: false, opacity: .8 })));
-    const fabric = createNeutronBinaryFabric();
+    const fabric = createNeutronBinaryFabric(blackHoles);
     scene.add(fabric.group);
 
     const starMaterial = new THREE.ShaderMaterial({
@@ -76,18 +80,40 @@ export default function NeutronBinaryScene({ isPaused, onPausedChange, restart, 
           gl_FragColor=vec4(c,1.);
         }`,
     });
+    const shadowMaterial = new THREE.ShaderMaterial({
+      vertexShader: `varying vec3 n; void main(){ n=normalize(normalMatrix*normal);
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+      fragmentShader: `varying vec3 n; void main(){
+        float rim=pow(1.-abs(normalize(n).z),12.);
+        gl_FragColor=vec4(vec3(.001,.001,.003)+rim*vec3(1.,.52,.16),1.);
+      }`,
+    });
+    const outlineMaterial = new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      vertexShader: `varying vec3 n; void main(){ n=normalize(normalMatrix*normal);
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+      fragmentShader: `varying vec3 n; void main(){
+        float edge=1.-abs(normalize(n).z);
+        float band=smoothstep(.55,.82,edge);
+        gl_FragColor=vec4(vec3(1.,.56,.22),band*.75);
+      }`,
+    });
     function makeStar(radius) {
       const group = new THREE.Group();
-      const core = new THREE.Mesh(new THREE.SphereGeometry(radius, 48, 32), starMaterial);
+      const core = new THREE.Mesh(new THREE.SphereGeometry(radius, 48, 32), blackHoles ? shadowMaterial : starMaterial);
       group.add(core);
-      const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, color: 0xa5ceff, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false, opacity: .8 }));
-      halo.scale.setScalar(radius * 8);
-      group.add(halo);
+      if (blackHoles) {
+        group.add(new THREE.Mesh(new THREE.SphereGeometry(radius * 1.13, 48, 32), outlineMaterial));
+      } else {
+        const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, color: 0xa5ceff, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false, opacity: .8 }));
+        halo.scale.setScalar(radius * 8);
+        group.add(halo);
+      }
       scene.add(group);
       return group;
     }
     const stars = [makeStar(.62), makeStar(.62)];
-    const remnant = makeStar(.79);
+    const remnant = makeStar(blackHoles ? 1.15 : .79);
     const flash = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, color: 0xd5c4ff, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0 }));
     scene.add(flash);
     const debrisGeometry = new THREE.BufferGeometry();
@@ -111,7 +137,8 @@ export default function NeutronBinaryScene({ isPaused, onPausedChange, restart, 
       const { width, height } = container.getBoundingClientRect();
       renderer.setSize(width, height);
       camera.aspect = width / Math.max(height, 1);
-      camera.fov = width < height ? 62 : 48;
+      // Fit the initial orbit horizontally even on narrow portrait viewports.
+      camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(48) / 2) / Math.min(1, camera.aspect)));
       camera.updateProjectionMatrix();
     };
     const observer = new ResizeObserver(resize);
@@ -145,9 +172,9 @@ export default function NeutronBinaryScene({ isPaused, onPausedChange, restart, 
       remnant.scale.setScalar(merge * (1 + .035 * Math.sin(after * 16) * Math.exp(-after)));
       remnant.rotation.y = elapsed * 2;
       starMaterial.uniforms.time.value = elapsed;
-      flash.material.opacity = after > 0 ? .7 * (1 - Math.exp(-after * 5)) * Math.exp(-after * .65) : 0;
+      flash.material.opacity = !blackHoles && after > 0 ? .7 * (1 - Math.exp(-after * 5)) * Math.exp(-after * .65) : 0;
       flash.scale.setScalar(6 + after * 2);
-      debris.visible = after > 0;
+      debris.visible = !blackHoles && after > 0;
       seeds.forEach((seed, i) => {
         const r = .8 + after * seed.speed;
         const theta = seed.angle + .45 * Math.log(1 + after);
@@ -157,7 +184,7 @@ export default function NeutronBinaryScene({ isPaused, onPausedChange, restart, 
       });
       debrisGeometry.attributes.position.needsUpdate = true;
       debris.material.opacity = Math.min(1, after) * Math.exp(-after * .17);
-      jets.visible = after > .8;
+      jets.visible = !blackHoles && after > .8;
       jets.scale.setScalar(Math.min(1, after / 3));
       fabric.group.visible = state.showFabric;
       fabric.update(elapsed, x, z, merge);
@@ -172,6 +199,8 @@ export default function NeutronBinaryScene({ isPaused, onPausedChange, restart, 
       cancelAnimationFrame(frame);
       observer.disconnect();
       renderer.domElement.removeEventListener("dblclick", doubleClick);
+      document.documentElement.style.touchAction = previousTouchAction[0];
+      document.body.style.touchAction = previousTouchAction[1];
       unlock();
       controls.dispose();
       const geometries = new Set();
@@ -182,10 +211,13 @@ export default function NeutronBinaryScene({ isPaused, onPausedChange, restart, 
       });
       geometries.forEach(g => g.dispose());
       materials.forEach(m => m.dispose());
+      starMaterial.dispose();
+      shadowMaterial.dispose();
+      outlineMaterial.dispose();
       texture.dispose();
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, []);
-  return <div ref={host} className="fixed inset-0" role="img" aria-label="ثنائي نيتروني — two neutron stars inspiraling and merging above spacetime">{failed && <p className="absolute inset-x-6 top-1/2 text-center text-indigo-100">تعذّر تشغيل العرض ثلاثي الأبعاد. WebGL is unavailable.</p>}</div>;
+  }, [blackHoles]);
+  return <div ref={host} className="absolute inset-0" role="img" aria-label={blackHoles ? "ثنائي ثقوب سوداء — two black holes inspiraling and merging above spacetime" : "ثنائي نيتروني — two neutron stars inspiraling and merging above spacetime"}>{failed && <p className="absolute inset-x-6 top-1/2 text-center text-indigo-100">تعذّر تشغيل العرض ثلاثي الأبعاد. WebGL is unavailable.</p>}</div>;
 }

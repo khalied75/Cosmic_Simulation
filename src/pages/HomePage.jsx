@@ -30,6 +30,16 @@ const copy = {
 
 const simulators = [
   {
+    id: "black-hole-binary",
+    title: { AR: "ثنائي ثقوب سوداء", EN: "Black Hole Binary" },
+    subtitle: { AR: "Black Hole Binary", EN: "Black Hole Merger" },
+    description: {
+      AR: "ثقبان أسودان يدوران ويتقاربان حتى الاندماج في ثقب واحد، مع ظلال داكنة وحلقات مضيئة توضيحية وموجات متحركة في غشاء الزمكان.",
+      EN: "Two black holes spiral into one remnant, with dark shadows, illustrative luminous outlines, and outgoing waves in the spacetime fabric.",
+    },
+    path: "/black-hole-binary", status: "ready", accent: "amber",
+  },
+  {
     id: "neutron-binary",
     title: { AR: "ثنائي نيتروني", EN: "Neutron Binary" },
     subtitle: { AR: "Neutron Binary", EN: "Neutron Star Merger" },

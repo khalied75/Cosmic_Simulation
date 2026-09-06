@@ -5,6 +5,7 @@ import CelestialMenu from "./CelestialMenu";
 import SpacetimeFabricToggle from "./SpacetimeFabricToggle";
 
 const routes = {
+  "black-hole-binary": "/black-hole-binary",
   "neutron-binary": "/neutron-binary",
   sun: "/sun",
   earth: "/earth",
@@ -21,7 +22,7 @@ const routes = {
   "bubble-universe": "/bubble-universe",
 };
 
-function CosmicNavbar({ selectedBody, menuLabel, tone = "default" }) {
+function CosmicNavbar({ selectedBody, menuLabel, tone = "default", showFabricToggle = true }) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { isArabic } = useLanguage();
@@ -69,7 +70,7 @@ function CosmicNavbar({ selectedBody, menuLabel, tone = "default" }) {
         selectedBody={selectedBody}
       />
 
-      {!(["atomic-simulation", "bubble-universe"].includes(selectedBody)) && (
+      {showFabricToggle && !(["atomic-simulation", "bubble-universe"].includes(selectedBody)) && (
         <SpacetimeFabricToggle bodyId={selectedBody} tone={tone} />
       )}
     </>
