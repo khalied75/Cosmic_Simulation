@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-const fabricState = new Map();
+const fabricState = new Map([["neutron-binary", true]]);
 const listeners = new Set();
 
 function emitChange() {

@@ -2,6 +2,11 @@ import { useLanguage } from "../context/LanguageContext";
 
 const bodies = [
   {
+    id: "neutron-binary", name: "Neutron Binary", arabicName: "ثنائي نيتروني",
+    type: "Neutron Star Merger", arabicType: "اندماج نجمين نيوترونيين",
+    status: "Ready", arabicStatus: "جاهز", color: "bg-violet-300",
+  },
+  {
     id: "sun",
     name: "Sun",
     arabicName: "الشمس",

@@ -5,6 +5,7 @@ import CelestialMenu from "./CelestialMenu";
 import SpacetimeFabricToggle from "./SpacetimeFabricToggle";
 
 const routes = {
+  "neutron-binary": "/neutron-binary",
   sun: "/sun",
   earth: "/earth",
   "atomic-simulation": "/atomic-simulation",

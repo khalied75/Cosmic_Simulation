@@ -30,6 +30,16 @@ const copy = {
 
 const simulators = [
   {
+    id: "neutron-binary",
+    title: { AR: "ثنائي نيتروني", EN: "Neutron Binary" },
+    subtitle: { AR: "Neutron Binary", EN: "Neutron Star Merger" },
+    description: {
+      AR: "نجمان نيوترونيان يدوران ويتقاربان حتى الاندماج، مع غشاء زمكان متحرك وموجات جاذبية حلزونية ووهج أزرق بنفسجي.",
+      EN: "Two neutron stars spiral into a merger above a dynamic spacetime fabric, with outgoing gravitational waves and blue-violet light.",
+    },
+    path: "/neutron-binary", status: "ready", accent: "violet",
+  },
+  {
     id: "sun",
     title: { AR: "محاكاة الشمس", EN: "Sun Simulator" },
     subtitle: { AR: "Sun Simulator", EN: "الشمس" },
